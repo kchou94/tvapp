@@ -1,11 +1,65 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="semantic/dist/semantic.min.css" rel="stylesheet">
+  <script
+    src="http://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+  <script src="semantic/dist/semantic.min.js"></script>
+  <title>Anime App</title>
+  <style>
+  #bg-video{
+    min-height: 100%;
+    min-width: 100%;
+    position: fixed;
+
+    padding: 0;
+    filter: blur(4px);
+  }
+
+  .ui.splash.segment{
+    font-size: 2em;
+  }
+
+  #mute-button{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  </style>
+</head>
+<body>
+  <header>
+    <!-- nav -->
+  </header>
+  <main>
+    <div class="ui middle aligned centered fullsize one column grid container">
+      <video id="bg-video" muted autoplay loop>
+        <source src="videos/yuruyuri-op.mp4">
+      </video>
+      <div class="column">
+        <div class="ui center aligned splash sizer segment">
+          <h1 class="ui huge header">Bonjour</h1>
+        </div>
+      </div>
+      <button class="ui icon button" id="mute-button">
+        <i class="volume off large icon"></i>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    $('#mute-button').click(function(){
+      if($('#bg-video').prop('muted')){
+        $('#bg-video').prop('muted', false);
+      } else {
+        $('#bg-video').prop('muted', true);
+      }
+    });
+  </script>
+</body>
 </html>
