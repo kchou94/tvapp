@@ -22650,12 +22650,6 @@ ol.ui.horizontal.list li:before,
 /*******************************
          Site Overrides
 *******************************/
-
-.ui.grid.fullsize {
-  height: 100vh;
-  width: 100vw;
-  margin: 0;
-}
 /*
  * # Semantic - Menu
  * http://github.com/semantic-org/semantic-ui/

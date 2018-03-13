@@ -11,55 +11,125 @@
   <script src="semantic/dist/semantic.min.js"></script>
   <title>Anime App</title>
   <style>
-  #bg-video{
-    min-height: 100%;
-    min-width: 100%;
-    position: fixed;
+    .ui.splash.segment{
+      font-size: 2rem;
+      background-color: rgba(0, 0, 0, 0.3);
+      border: 1px rgba(255, 255, 255, 0.8) solid;
+      position: absolute;
+      text-align: center;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 60%;
+      padding: 8% 10%;
+    }
 
-    padding: 0;
-    filter: blur(4px);
-  }
+    @media (max-width: 768px){
+      .ui.splash.segment{
+      padding: 2% 12%;
+      min-width: 75%;
+      }
+    }
 
-  .ui.splash.segment{
-    font-size: 2em;
-  }
+    .ui.splash .header{
+      font-weight: 400;
+      margin: 0 auto;
+      margin-bottom: 20px;
+    }
 
-  #mute-button{
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-  }
+    .splash-text{
+      margin-bottom: 5%;
+    }
 
+    nav.ui.inverted.menu{
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    #bg-video{
+      min-height: 101%;
+      min-width: 101%;
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      padding: 0;
+      filter: blur(4px);
+    }
+
+    #dot-overlay{
+      background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAHUlEQVQYV2NkYGD4zwABjDACQwCqAKISrAwKwAIAisMEA5Sp5Q4AAAAASUVORK5CYII=") repeat;
+      z-index: 1;
+      min-height: 100%;
+      min-width: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: -1;
+      opacity: 0.05;
+    }
+
+    #star-left{
+      position: absolute;
+      top: 45%;
+      left: 10%;
+    }
+
+    #star-right{
+      position: absolute;
+      top: 45%;
+      right: 10%;
+    }
   </style>
 </head>
 <body>
   <header>
-    <!-- nav -->
-  </header>
-  <main>
-    <div class="ui middle aligned centered fullsize one column grid container">
-      <video id="bg-video" muted autoplay loop>
-        <source src="videos/yuruyuri-op.mp4">
-      </video>
-      <div class="column">
-        <div class="ui center aligned splash sizer segment">
-          <h1 class="ui huge header">Bonjour</h1>
+    <nav class="ui inverted borderless large menu">
+      <div class="ui container">
+        <div class="header item">
+          <a href="/">
+            <i class="star outline icon"></i>
+            MMC
+          </a>
+        </div>
+        <a class="item active">Home</a>
+        <a class="item">Shows</a>
+        <div class="right menu">
+          <div class="ui dropdown item">
+            <i class="user circle icon"></i>
+            <div class="text"> User</div>
+            <div class="menu">
+              <a href="#" class="item">Login</a>
+              <a href="#" class="item">Sign Up</a>
+            </div>
+          <!-- <a class="item">Login</a>
+          <a class="item">Sign Up</a> -->
+          </div>
         </div>
       </div>
-      <button class="ui icon button" id="mute-button">
-        <i class="volume off large icon"></i>
+    </nav>
+  </header>
+  <main>
+    <video id="bg-video" muted autoplay loop>
+      <source src="videos/k-on-clips-short.mp4">
+    </video>
+    <div id="dot-overlay"></div>
+    <div class="ui center aligned middle aligned splash sizer inverted segment">
+      <i id="star-left" class="large star outline loading icon"></i>
+      <div class="splash-text">
+        <h1 class="ui huge inverted header">MOE MOE CLUB</h1>
+        <p>Moe made easy.</p>
       </div>
+      <i id="star-right" class="large star outline loading icon"></i>
+      <button class="ui huge primary button">Quack</button>
     </div>
   </main>
 
-  <script>
-    $('#mute-button').click(function(){
-      if($('#bg-video').prop('muted')){
-        $('#bg-video').prop('muted', false);
-      } else {
-        $('#bg-video').prop('muted', true);
-      }
-    });
-  </script>
+<script>
+  $('.ui.dropdown').dropdown({
+    action: 'hide'
+  });
+</script>
+
 </body>
 </html>
