@@ -8,7 +8,7 @@ var router = express.Router();
 
 /* INDEX */
 router.get('/', function(req, res) {
-  res.render('shows/index', {page: 'Shows'});
+  res.render('shows/index', {page: 'shows'});
 });
 
 module.exports = router;
