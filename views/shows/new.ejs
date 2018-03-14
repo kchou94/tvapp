@@ -1,0 +1,45 @@
+<!-- Shows!  Index! -->
+        <%- include('../partials/header') %>
+            <div class="ui center aligned inverted vertical very padded segment masthead">
+                <h1 class="ui inverted header">Add New Show</h1>
+            </div>
+            <div class="ui vertical very padded segment container">
+                <form class="ui form" enctype="multipart/form-data" action="/shows" method="POST">
+                    <h2 class="ui dividing header">Title</h2>
+                        <div class="field">
+                            <label for="input-title">English Title</label>
+                            <input id="input-title" type="text" name="show[title]">
+                        </div>
+                        <div class="field">
+                            <label for="input-foreign-title">Foreign Title</label>
+                            <input id="input-foreign-title" type="text" name="show[foreignTitle]">
+                        </div>
+                    <h2 class="ui dividing header">Show Information</h2>
+                        <div class="field">
+                            <label for="input-image">Image</label>
+                            <input id="input-image" type="file" name="show[image]">
+                        </div>
+                        <div class="field">
+                            <label for="input-description">Description</label>
+                            <textarea id="input-description" name="show[description]"></textarea>
+                        </div>
+                        <div class="field">
+                            <label for="input-year">Debut Year</label>
+                            <input id="input-year" type="text" name="show[year]">
+                        </div>
+                        <div class="ui fluid multiple search selection dropdown">
+                            <input id="input-tags" type="hidden" name="show[tags]">
+                            <div class="default text">Tags</div>
+                        </div>
+                        <input class="ui primary large button" type="submit">
+                </form>
+            </div> <!--/container-->
+        </main>
+        <script>
+            $('.ui.dropdown').dropdown();
+            $('.ui.search.dropdown').dropdown({
+                allowAdditions: true
+            });
+
+        </script>
+    <%- include('../partials/footer') %>

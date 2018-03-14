@@ -3,7 +3,7 @@
             <div class="ui center aligned inverted vertical very padded segment masthead">
                 <h1 class="ui inverted header">Moe Moe Club</h1>
                 <h2 class="ui inverted header">Shows</h2>
-                <button class="ui large primary button">Add a show!</button>
+                <a href="/shows/new" class="ui large primary button">Add a show!</a>
             </div>
             <div class="ui vertical very padded segment container">
                 <div class="ui centered cards">
@@ -134,6 +134,32 @@
                             </div>
                         </div>
                     </div> <!--/card-->
+                    <% shows.forEach(function(show){ %>
+                    <div class="ui raised link card">
+                        <div class="image">
+                            <img src="<%= show.image %>" alt="<%= show.title %>> poster art">
+                        </div>
+                        <div class="content">
+                            <div class="right floated meta">
+                                <i class="like icon"></i>
+                                99
+                            </div>
+                            <div class="header"><%= show.title %></div>
+                            <div class="meta">
+                                <span class="date"><%= show.year %></span>
+                                <span class="foreign-name"><%= show.foreignTitle %></span>
+                            </div>
+                            <div class="ui horizontal divider">
+                                Tags
+                            </div>
+                            <div class="extra content">
+                                <% show.tags.forEach(function(tag){ %>
+                                <div class="ui basic label"><%= tag %></div>
+                                <% }); %>
+                            </div>
+                        </div>
+                    </div> <!--/card-->
+                    <% }); %>
                 </div> <!--/cards-->
             </div> <!--/container-->
         </main>
