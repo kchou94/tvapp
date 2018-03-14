@@ -42,7 +42,7 @@ router.post('/', upload.single('show[image]'), function(req, res){
   var showData = req.body.show;
   var tagArray = showData.tags.split(',');
   showData.tags = tagArray;
-  newPath = req.file.path.substring(req.file.path.indexOf('\\') + 1);
+  newPath = req.file.path.substring(req.file.path.indexOf('public\\') + 7);
   console.log(newPath);
   showData.image = newPath;
   Show.create(showData, function(err, showCreated){
