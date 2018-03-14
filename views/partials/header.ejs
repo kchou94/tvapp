@@ -9,7 +9,11 @@
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
         <script src="semantic/dist/semantic.min.js"></script>
-        <title>Anime App</title>
+        <title>
+            Moe Moe Club<% if(typeof page != 'undefined' && page != 'home'){ %>
+                <%= " | " + page[0].toUpperCase() + page.substr(1); %>
+            <% } %>
+        </title>
         <style>
             .ui.splash.segment{
                 font-size: 2rem;
