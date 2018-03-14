@@ -25,11 +25,14 @@
                         </div>
                         <div class="field">
                             <label for="input-year">Debut Year</label>
-                            <input id="input-year" type="text" name="show[year]">
+                            <input id="input-year" type="text" name="show[year]" placeholder="e.g. 2013">
                         </div>
-                        <div class="ui fluid multiple search selection dropdown">
-                            <input id="input-tags" type="hidden" name="show[tags]">
-                            <div class="default text">Tags</div>
+                        <div class="field">
+                            <label>Tags</label>
+                            <div class="ui fluid multiple search selection dropdown">
+                                <input id="input-tags" type="hidden" name="show[tags]">
+                                <div class="default text">Separate tags with commas</div>
+                            </div>
                         </div>
                         <input class="ui primary large button" type="submit">
                 </form>
