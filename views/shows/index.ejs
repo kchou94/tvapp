@@ -8,7 +8,7 @@
             <div class="ui vertical very padded segment container">
                 <div class="ui centered cards">
                     <% shows.forEach(function(show){ %>
-                    <div class="ui raised link card">
+                    <a href="/shows/<%= show._id %>" class="ui raised link card">
                         <div class="image">
                             <img src="<%= show.image %>" alt="<%= show.title %>> poster art">
                         </div>
@@ -31,7 +31,7 @@
                                 <% }); %>
                             </div>
                         </div>
-                    </div> <!--/card-->
+                    </a> <!--/card-->
                     <% }); %>
                 </div> <!--/cards-->
             </div> <!--/container-->

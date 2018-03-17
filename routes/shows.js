@@ -25,15 +25,22 @@ var upload = multer({storage: storage});
 /* INDEX */
 router.get('/', function(req, res) {
   Show.find({}, function(err, showsFound){
-    if(err) return res.redirect('/back');
+    if(err) return res.redirect('back');
     res.render('shows/index', {page: 'shows', shows: showsFound});
   })
 });
 
+/* SHOW */
+router.get('/:id', function(req, res) {
+  Show.findById(req.params.id, function(err, showFound){
+    if(err) return res.redirect('back');
+    res.render('shows/show', {show: showFound});
+  });
+});
+
 /* NEW */
 router.get('/new', function(req, res){
-  var show = Show.findOne()
-  res.render('shows/new', {show : show});
+  res.render('shows/new');
 });
 
 /* CREATE */
