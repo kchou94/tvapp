@@ -10,7 +10,16 @@ var showSchema = new mongoose.Schema({
     image: String,
     description: String,
     year: Number,
-    tags: [String]
+    tags: [String],
+    seasons: [{
+        name: String,
+        videos: [{
+            title: String,
+            url: String,
+            thumbnail: String,
+            spoiler: Boolean
+        }]
+    }]
 });
 
 var Show = mongoose.model('Show', showSchema);

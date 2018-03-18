@@ -5,14 +5,100 @@
                     <p class="sub header"><%= show.foreignTitle %></p>
                 </h1>
             </div>
-            <div class="ui vertical very padded segment container">
-                <h2>Wahu</h2>
+            <div id="content" class="ui vertical very padded segment container">
+                <div class="ui centered stackable grid">
+                    <div class="six wide column">
+                        <div class="ui raised segments">
+                            <div class="ui segment">
+                                <img class="ui medium centered image" src="/<%= show.image %>">
+                                <h2 class="ui medium header"><%= show.title %>
+                                    <p class="sub header"><%= show.foreignTitle %></p>
+                                </h2>
+                                <p>Debut: <%= show.year %></p>
+                            </div>
+                            <div class="ui segment">
+                                <h3 class="ui small header">Description</h3>
+                                <p><%= show.description %></p>
+                            </div>
+                            <div class="ui segment">
+                                <h3 class="ui small header">Tags</h3>
+                                <% if(show.tags[0]){ %>
+                                <% show.tags.forEach(function(tag){ %>
+                                <span class="ui basic label"><%= tag %></span>
+                                <% }); %>
+                                <% } else { %>
+                                Nothing!
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ten wide column">
+                        <div class="ui segments">
+                            <a href="/shows/<%= show._id %>/seasons/new" class="ui top attached button">
+                                Add a Season
+                            </a>
+                            <% if(show.seasons[0]){ %>
+                            <% show.seasons.forEach(function(season){ %>
+                            <div class="ui segment">
+                                <h2><%= season.name %></h2>
+                                <a href="/shows/<%= show._id%>/seasons/<%= season._id %>/videos/add" class="ui right floated small basic button">Add</a>
+                                <h3>Clips</h3>
+                                <div class="ui three stackable cards">
+                                <% if(season.videos.length){ %>
+                                <% season.videos.forEach(function(video){ %>
+                                <a class="link card modal-open" data-url="<%= video.url %>">
+                                    <div class="image<%= video.spoiler ? ' spoiler' : '' %>">
+                                        <img src="<%= video.thumbnail %>">
+                                    </div>
+                                    <div class="content">
+                                        <div class="description"><%= video.title %></div>
+                                    </div>
+                                </a>
+                                <% }) %>
+                                <% } else { %>
+                                    <div class="ui icon message">
+                                        <i class="frown outline icon"></i>
+                                        <div class="header">Sabishii...</div>
+                                        <p>There's nothing here!</p>
+                                    </div>  
+                                <% } %>
+                                </div>
+                            </div>
+                            <% }); %>
+                            <% } else {  %>
+                            <div class="ui segment">
+                                <div class="ui icon message">
+                                    <i class="frown outline icon"></i>
+                                    <div class="header">Sabishii...</div>
+                                    <p>There's nothing here!</p>
+                                </div>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
             </div> <!--/container-->
+            <div class="ui fullscreen basic modal">
+                <i class="large close icon"></i>
+                <div class="header">
+                    ABC
+                </div>
+                <div style="width:100%;height:0px;position:relative;padding-bottom:56.250%;">
+                    <iframe src="" frameborder="0" width="100%" height="100%" allowfullscreen style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow:hidden;"></iframe>
+                </div>
+            </div>
         </main>
         <script>
         $('.ui.dropdown').dropdown();
-        $('.ui.search.dropdown').dropdown({
-            allowAdditions: true
-        });
+        $('.modal-open').click(function(){
+            var modalSrc = $(this).attr('data-url');
+            $('.ui.modal iframe').attr('src', modalSrc) 
+            $('.ui.modal').modal({
+                onHide: function(){
+                    $(this).find('iframe').attr('src', '');
+                }
+            })
+            .modal('show');
+        })
         </script>
     <%- include('../partials/footer') %>

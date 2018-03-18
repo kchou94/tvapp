@@ -30,14 +30,6 @@ router.get('/', function(req, res) {
   })
 });
 
-/* SHOW */
-router.get('/:id', function(req, res) {
-  Show.findById(req.params.id, function(err, showFound){
-    if(err) return res.redirect('back');
-    res.render('shows/show', {show: showFound});
-  });
-});
-
 /* NEW */
 router.get('/new', function(req, res){
   res.render('shows/new');
@@ -47,10 +39,14 @@ router.get('/new', function(req, res){
 
 router.post('/', upload.single('show[image]'), function(req, res){
   var showData = req.body.show;
-  var tagArray = showData.tags.split(',');
-  showData.tags = tagArray;
+  showData.description = undefined;
+  if(showData.tags === ''){
+    showData.tags = undefined;
+  } else {
+    var tagArray = showData.tags.split(',');
+    showData.tags = tagArray;
+  }
   newPath = req.file.path.substring(req.file.path.indexOf('public\\') + 7);
-  console.log(newPath);
   showData.image = newPath;
   Show.create(showData, function(err, showCreated){
     if(err){
@@ -58,6 +54,14 @@ router.post('/', upload.single('show[image]'), function(req, res){
       return res.redirect('back');
     } 
     res.redirect('/shows');
+  });
+});
+
+/* SHOW */
+router.get('/:id', function(req, res) {
+  Show.findById(req.params.id, function(err, showFound){
+    if(err) return res.redirect('back');
+    res.render('shows/show', {show: showFound});
   });
 });
 
