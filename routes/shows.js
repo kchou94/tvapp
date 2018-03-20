@@ -127,4 +127,18 @@ router.put('/:showId/seasons/:seasonId', function(req, res){
   });
 });
 
+/* DESTROY */
+router.delete('/:showId/seasons/:seasonId', function(req, res){
+  var showId = req.params.showId;
+  var seasonId = req.params.seasonId;
+  Show.findByIdAndUpdate(showId, {$pull: {seasons: {'_id': seasonId}}}, function(err, affected){
+    if(err){
+      // console.log(err); 
+      return res.redirect('back');
+    }
+    // console.log(affected);
+    res.redirect('back');
+  });
+});
+
 module.exports = router;
