@@ -40,9 +40,18 @@
                             <% if(show.seasons[0]){ %>
                             <% show.seasons.forEach(function(season){ %>
                             <div class="ui segment">
-                                <h2><%= season.name %></h2>
-                                <a href="/shows/<%= show._id%>/seasons/<%= season._id %>/videos/add" class="ui right floated small basic button">Add</a>
-                                <h3>Clips</h3>
+                                <div>
+                                    <a href="/shows/<%= show._id %>/seasons/<%= season._id %>/edit" id="edit-button" class="circular left floated ui mini basic icon button">
+                                        <i class="edit icon"></i>
+                                    </a>
+                                    <span class="ui large header"><%= season.name %></span>
+                                </div>
+                                <div>
+                                    <a href="/shows/<%= show._id%>/seasons/<%= season._id %>/videos/add" class="ui right floated small button">
+                                        Add
+                                    </a>
+                                    <h3 class="ui header">Clips</h3>
+                                </div>
                                 <% if(season.videos.length){ %>
                                 <div class="ui three stackable cards">
                                 <% season.videos.forEach(function(video){ %>

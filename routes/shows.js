@@ -137,7 +137,7 @@ router.delete('/:showId/seasons/:seasonId', function(req, res){
       return res.redirect('back');
     }
     // console.log(affected);
-    res.redirect('back');
+    res.redirect('/shows/' + showId);
   });
 });
 
