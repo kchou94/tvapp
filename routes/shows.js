@@ -22,6 +22,10 @@ var storage = multer.diskStorage({
 });
 var upload = multer({storage: storage});
 
+/*===========
+Index Routes
+============*/
+
 /* INDEX */
 router.get('/', function(req, res) {
   Show.find({}, function(err, showsFound){
@@ -62,6 +66,35 @@ router.get('/:id', function(req, res) {
   Show.findById(req.params.id, function(err, showFound){
     if(err) return res.redirect('back');
     res.render('shows/show', {show: showFound});
+  });
+});
+
+/*===========
+Season Routes
+============*/
+
+/* NEW */
+router.get('/:id/seasons/new', function(req, res){
+  var id = req.params.id;
+  Show.findById(id, function(err, showFound){
+    if(err) return res.redirect('back');
+    res.render('shows/seasons/new', {show: showFound});
+  });
+});
+
+/* CREATE */
+router.post('/:id/seasons', upload.single(), function(req, res){
+  var id = req.params.id;
+  var seasonData = req.body.season;
+  // console.log(seasonData);
+  Show.findById(id, function(err, showFound){
+    if(err) return res.redirect('back');
+    showFound.seasons.push(seasonData);
+    // console.log(showFound);
+    showFound.save(function(err){
+      if(err) return res.redirect('back');
+      res.redirect('/shows/' + showFound.id);
+    });
   });
 });
 

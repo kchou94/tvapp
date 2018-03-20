@@ -1,0 +1,32 @@
+<!-- Shows!  Seasons! -->
+        <%- include('../../partials/header') %>
+            <div class="ui center aligned inverted vertical very padded segment masthead">
+                <h1 class="ui inverted header">Add New Season
+                    <p class="sub header">Add a new season, OVA, movie, etc.</p>
+                </h1>
+            </div>
+            <div class="ui vertical very padded segment container">
+                <form class="ui form" enctype="multipart/form-data" action="/shows/<%= show.id %>/seasons" method="POST">
+                    <h2 class="ui dividing header"><%= show.title %></h2>
+                        <div class="field">
+                            <label for="input-name">Season Name</label>
+                            <input id="input-name" type="text" name="season[name]">
+                        </div>
+                    <h3 class="ui header">Existing Seasons:</h3>
+                        <% if(show.seasons[0]){ %>
+                        <ul class="ui list">
+                        <% show.seasons.forEach(function(season){ %>
+                        <li><%= season.name %></li>
+                        <% }); %>
+                        </ul>
+                        <% } else { %>
+                        <p>Nothing!</p>
+                        <% } %>
+                        <input class="ui primary large button" type="submit">
+                </form>
+            </div> <!--/container-->
+        </main>
+        <script>
+        $('.ui.dropdown').dropdown();
+        </script>
+    <%- include('../../partials/footer') %>

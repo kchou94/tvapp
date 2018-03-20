@@ -43,8 +43,8 @@
                                 <h2><%= season.name %></h2>
                                 <a href="/shows/<%= show._id%>/seasons/<%= season._id %>/videos/add" class="ui right floated small basic button">Add</a>
                                 <h3>Clips</h3>
-                                <div class="ui three stackable cards">
                                 <% if(season.videos.length){ %>
+                                <div class="ui three stackable cards">
                                 <% season.videos.forEach(function(video){ %>
                                 <a class="link card modal-open" data-url="<%= video.url %>">
                                     <div class="image<%= video.spoiler ? ' spoiler' : '' %>">
@@ -55,14 +55,15 @@
                                     </div>
                                 </a>
                                 <% }) %>
+                                </div>
                                 <% } else { %>
-                                    <div class="ui icon message">
+                                    <div class="ui icon compact message">
                                         <i class="frown outline icon"></i>
                                         <div class="header">Sabishii...</div>
                                         <p>There's nothing here!</p>
                                     </div>  
                                 <% } %>
-                                </div>
+                                
                             </div>
                             <% }); %>
                             <% } else {  %>
