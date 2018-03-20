@@ -9,6 +9,7 @@ var crypto = require('crypto');
 var path = require('path');
 var multer = require('multer');
 
+
 var Show = require('../models/show');
 
 var storage = multer.diskStorage({
@@ -83,18 +84,46 @@ router.get('/:id/seasons/new', function(req, res){
 });
 
 /* CREATE */
-router.post('/:id/seasons', upload.single(), function(req, res){
+router.post('/:id/seasons', function(req, res){
   var id = req.params.id;
   var seasonData = req.body.season;
   // console.log(seasonData);
   Show.findById(id, function(err, showFound){
     if(err) return res.redirect('back');
     showFound.seasons.push(seasonData);
-    // console.log(showFound);
+    console.log(showFound);
     showFound.save(function(err){
       if(err) return res.redirect('back');
       res.redirect('/shows/' + showFound.id);
     });
+  });
+});
+
+/* EDIT */
+router.get('/:showId/seasons/:seasonId/edit', function(req, res){
+  var showId = req.params.showId;
+  var seasonId = req.params.seasonId;
+  // console.log(seasonId);
+  Show.findById(showId, function(err, showFound){
+    if(err) return res.redirect('back');
+    var season = showFound.seasons.id(seasonId);
+    // console.log(season);
+    res.render('shows/seasons/edit', {show: showFound, season: season});
+  });
+});
+
+/* UPDATE */
+router.put('/:showId/seasons/:seasonId', function(req, res){
+  var showId = req.params.showId;
+  var seasonId = req.params.seasonId;
+  var seasonData = req.body.season;
+  Show.findOneAndUpdate({'_id': showId, 'seasons._id': seasonId}, {'$set': {'seasons.$': seasonData}}, function(err, showUpdated){
+    if(err){
+      // console.log(err); 
+      return res.redirect('back');
+    }
+    // console.log(showUpdated);
+    res.redirect('/shows/' + showUpdated.id);
   });
 });
 

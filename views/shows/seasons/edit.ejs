@@ -1,16 +1,17 @@
-<!-- Shows!  Seasons! New! -->
+<!-- Shows!  Seasons! Edit! -->
         <%- include('../../partials/header') %>
             <div class="ui center aligned inverted vertical very padded segment masthead">
-                <h1 class="ui inverted header">Add New Season
-                    <p class="sub header">Add a new season, OVA, movie, etc.</p>
-                </h1>
+                <h1 class="ui inverted header">Edit Season</h1>
             </div>
             <div class="ui vertical very padded segment container">
-                <form class="ui form" action="/shows/<%= show.id %>/seasons" method="POST">
-                    <h2 class="ui dividing header"><%= show.title %></h2>
+                <form class="ui form" action="/shows/<%= show.id %>/seasons/<%= season.id %>?_method=PUT" method="POST">
+                    <h2 class="ui dividing header">
+                        <%= show.title %>
+                        <p class="sub header">Editing name for <%= season.name %></p>
+                    </h2>
                         <div class="field">
-                            <label for="input-name">Season Name</label>
-                            <input id="input-name" type="text" name="season[name]">
+                            <label for="input-name">Update Season Name</label>
+                            <input id="input-name" type="text" name="season[name]" placeholder="<%= season.name %>">
                         </div>
                     <h3 class="ui header">Existing Seasons:</h3>
                         <% if(show.seasons[0]){ %>
