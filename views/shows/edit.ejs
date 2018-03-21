@@ -1,0 +1,70 @@
+<!-- Shows!  Edit! -->
+        <%- include('../partials/header') %>
+            <div class="ui center aligned inverted vertical very padded segment masthead">
+                <h1 class="ui inverted header">Edit Show</h1>
+            </div>
+            <div class="ui vertical very padded segment container">
+                <form class="ui form" enctype="multipart/form-data" action="/shows/<%= show._id %>?_method=PUT" method="POST">
+                    <h2 class="ui dividing header">Title</h2>
+                        <div class="field">
+                            <label for="input-title">English Title</label>
+                            <input id="input-title" type="text" name="show[title]" value="<%= show.title %>">
+                        </div>
+                        <div class="field">
+                            <label for="input-foreign-title">Foreign Title</label>
+                            <input id="input-foreign-title" type="text" name="show[foreignTitle]" value="<%= show.foreignTitle %>">
+                        </div>
+                    <h2 class="ui dividing header">Show Information</h2>
+                        <div class="ui two column middle aligned stackable grid">
+                            <div class="field column">
+                                <label for="input-image">Image</label>
+                                <input id="input-image" type="file" name="show[image]">                            
+                            </div>
+                            <div class="column">
+                                <h3 class="ui small centered header">Existing Image:</h3>
+                                <img class="ui small centered image" src="/<%= show.image %>">
+                            </div>
+                        </div>
+                        
+                        <div class="field">
+                            <label for="input-description">Description</label>
+                            <textarea id="input-description" name="show[description]"><%= show.description %></textarea>
+                        </div>
+                        <div class="field">
+                            <label for="input-year">Debut Year</label>
+                            <input id="input-year" type="text" name="show[year]" value="<%= show.year %>">
+                        </div>
+                        <div class="field">
+                            <label>Tags</label>
+                            <div class="ui fluid multiple search selection dropdown">
+                                <input id="input-tags" type="hidden" name="show[tags]">
+                                <div class="default text">Separate tags with commas</div>
+                            </div>
+                            <div class="ui pointing orange basic label">
+                                These will overwrite all existing tags! Make sure to include tags you want to keep.
+                            </div>
+                        </div>
+                        <p>
+                            <span class="ui tiny header">Existing Tags: </span>
+                            <% if(show.tags[0]){ %>
+                            <% show.tags.forEach(function(tag){ %>
+                            <span class="ui basic label">
+                                <%= tag %>
+                            </span>
+                            <% }); %>
+                            <% } else { %>
+                            Nothing!
+                            <% } %>
+                        </p>
+                        <input class="ui primary large button" type="submit">
+                </form>
+            </div> <!--/container-->
+        </main>
+        <script>
+            $('.ui.dropdown').dropdown();
+            $('.ui.search.dropdown').dropdown({
+                allowAdditions: true
+            });
+
+        </script>
+    <%- include('../partials/footer') %>

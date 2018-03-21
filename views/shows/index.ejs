@@ -26,9 +26,11 @@
                                 Tags
                             </div>
                             <div class="extra content">
+                                <% if(show.tags[0]){ %>
                                 <% show.tags.forEach(function(tag){ %>
                                 <div class="ui basic label"><%= tag %></div>
                                 <% }); %>
+                                <% } %>
                             </div>
                         </div>
                     </a> <!--/card-->

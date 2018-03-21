@@ -24,7 +24,7 @@ var storage = multer.diskStorage({
 var upload = multer({storage: storage});
 
 /*===========
-Index Routes
+Show Routes
 ============*/
 
 /* INDEX */
@@ -44,18 +44,16 @@ router.get('/new', function(req, res){
 
 router.post('/', upload.single('show[image]'), function(req, res){
   var showData = req.body.show;
-  showData.description = undefined;
-  if(showData.tags === ''){
-    showData.tags = undefined;
+  if(tagStr === ''){
+    showData.tags = [];
   } else {
-    var tagArray = showData.tags.split(',');
-    showData.tags = tagArray;
+    showData.tags = tagStr.split(',');
   }
   newPath = req.file.path.substring(req.file.path.indexOf('public\\') + 7);
   showData.image = newPath;
   Show.create(showData, function(err, showCreated){
     if(err){
-      console.log(err);
+      // console.log(err);
       return res.redirect('back');
     } 
     res.redirect('/shows');
@@ -67,6 +65,46 @@ router.get('/:id', function(req, res) {
   Show.findById(req.params.id, function(err, showFound){
     if(err) return res.redirect('back');
     res.render('shows/show', {show: showFound});
+  });
+});
+
+/* EDIT */
+router.get('/:id/edit', function(req, res){
+  Show.findById(req.params.id, function(err, showFound){
+    if(err){
+      // console.log(err);
+      return res.redirect('back');
+    }
+    // console.log(showFound);
+    res.render('shows/edit', {show: showFound});
+  });
+});
+
+/* UPDATE */
+
+router.put('/:id', upload.single('show[image]'), function(req, res){
+  var showData = req.body.show;
+  var tagStr = showData.tags;
+  // console.log('desc: ' + showData.description);
+  // console.log('before: ' + showData.tags);
+  if(tagStr === ''){
+    showData.tags = [];
+  } else {
+    showData.tags = tagStr.split(',');
+  }
+  // console.log('after: ' + showData.tags);
+  // console.log(req.file);
+  if(req.file){
+    newPath = req.file.path.substring(req.file.path.indexOf('public\\') + 7);
+    showData.image = newPath;
+  }
+  Show.findByIdAndUpdate(req.params.id, showData, function(err, showUpdated){
+    if(err){
+      // console.log(err);
+      return res.redirect('back');
+    }
+    // console.log(showUpdated);
+    res.redirect('/shows/' + showUpdated._id);
   });
 });
 
