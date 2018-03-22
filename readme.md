@@ -10,20 +10,23 @@ This project uses Node, Express, MongoDB, and Semantic UI.
 Note: (?) denotes less important features
 
 - ~~Full-page video landing screen~~
-- Shows index with all shows
-    - User-made pages for each show/series
-        - Show description
-        - User-submitted clips
-            - Add new clips (probably from Streamable etc.)
-            - Delete clips
-        - Edit show
-        - Delete show
-        - User-submitted images
-            - Add new image
-            - Delete image
+- Shows
+    - ~~Index with all shows~~
+    - ~~User-made pages for each show/series~~
+        - ~~Show description~~
+        - ~~Add new shows~~
+        - ~~Edit show~~
+        - ~~Delete show~~
+        - ~~Clips gallery~~
+        - ~~Image gallery~~
         - User ratings/comments (?)
         - Recommendations (?)
-    - Add new shows
+    - User-submitted clips
+            - Add new clips (probably from Streamable etc.)
+            - Delete clips
+    - User-submitted images
+            - Add new images
+            - Delete images
     - Categories (?)
     - Sorting (?)
     - Searching (?)
