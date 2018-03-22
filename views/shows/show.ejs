@@ -40,32 +40,33 @@
                             <% if(show.seasons[0]){ %>
                             <% show.seasons.forEach(function(season){ %>
                             <div class="ui segment">
-                                <div>
-                                    <a href="/shows/<%= show._id %>/seasons/<%= season._id %>/edit" id="edit-button" class="circular left floated ui mini basic icon button">
+                                <h3>
+                                    <a href="/shows/<%= show._id %>/seasons/<%= season._id %>/edit" id="edit-button" class="circular compact left floated ui small basic icon button">
                                         <i class="edit icon"></i>
                                     </a>
-                                    <span class="ui large header"><%= season.name %></span>
-                                </div>
-                                <div>
-                                    <a href="/shows/<%= show._id%>/seasons/<%= season._id %>/videos/add" class="ui right floated small button">
-                                        Add
-                                    </a>
-                                    <h3 class="ui header">Clips</h3>
-                                </div>
-                                <% if(season.videos.length){ %>
-                                <div class="ui three stackable cards">
-                                <% season.videos.forEach(function(video){ %>
-                                <a class="link card modal-open" data-url="<%= video.url %>">
-                                    <div class="image<%= video.spoiler ? ' spoiler' : '' %>">
-                                        <img src="<%= video.thumbnail %>">
+                                    <span class="ui header"><%= season.name %></span>
+                                </h3>
+                                <div class="ui basic segment">
+                                    <h4>
+                                        <a href="/shows/<%= show._id%>/seasons/<%= season._id %>/videos/new" class="circular compact left floated ui mini basic icon button">
+                                            <i class="add icon"></i>
+                                        </a>
+                                        <span class="ui header">Clips</span>
+                                    </h4>                                                                                                      
+                                    <% if(season.videos.length){ %>                                    
+                                    <div class="ui three stackable cards">
+                                        <% season.videos.forEach(function(video){ %>
+                                        <a class="link card video-modal-open" data-url="<%= video.url %>" data-desc="<%= video.description %>">
+                                            <div class="image<%= video.spoiler ? ' spoiler' : '' %>">
+                                                <img src="<%= video.thumbnail %>">
+                                            </div>
+                                            <div class="content">
+                                                <div class="description"><%= video.description %></div>
+                                            </div>
+                                        </a>
+                                        <% }) %>
                                     </div>
-                                    <div class="content">
-                                        <div class="description"><%= video.title %></div>
-                                    </div>
-                                </a>
-                                <% }) %>
-                                </div>
-                                <% } else { %>
+                                    <% } else { %>
                                     <div class="ui icon message">
                                         <i class="frown outline icon"></i>
                                         <div class="content">
@@ -73,7 +74,38 @@
                                             <p>There's nothing here!</p>
                                         </div>
                                     </div>  
-                                <% } %>
+                                    <% } %>                                    
+                                </div>
+                                <div class="ui basic segment">
+                                    <h4>
+                                        <a href="/shows/<%= show._id%>/seasons/<%= season._id %>/images/new" class="circular compact left floated ui mini basic icon button">
+                                            <i class="add icon"></i>
+                                        </a>
+                                        <span class="ui header">Images</span>
+                                    </h4>                                    
+                                    <% if(season.images.length){ %>
+                                    <div class="ui three stackable cards">
+                                        <% season.images.forEach(function(image){ %>
+                                        <a class="link card image-modal-open" data-url="<%= image.url %>" data-desc="<%= image.description %>">
+                                            <div class="image<%= image.spoiler ? ' spoiler' : '' %>">
+                                                <img src="<%= image.url %>">
+                                            </div>
+                                            <div class="content">
+                                                <div class="description"><%= image.description %></div>
+                                            </div>
+                                        </a>
+                                        <% }) %>
+                                    </div>
+                                    <% } else { %>
+                                    <div class="ui icon message">
+                                        <i class="frown outline icon"></i>
+                                        <div class="content">
+                                            <div class="header">Sabishii...</div>
+                                            <p>There's nothing here!</p>
+                                        </div>
+                                    </div>  
+                                    <% } %>                                    
+                                </div>
                             </div>
                             <% }); %>
                             <% } else {  %>
@@ -91,27 +123,39 @@
                     </div>
                 </div>
             </div> <!--/container-->
-            <div class="ui fullscreen basic modal">
+            <div id="video-modal" class="ui fullscreen basic modal">
                 <i class="large close icon"></i>
-                <div class="header">
-                    ABC
-                </div>
+                <div class="header"></div>
                 <div style="width:100%;height:0px;position:relative;padding-bottom:56.250%;">
                     <iframe src="" frameborder="0" width="100%" height="100%" allowfullscreen style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow:hidden;"></iframe>
                 </div>
-            </div>
+            </div> <!-- /modal -->
+            <div id="image-modal" class="ui fullscreen basic modal">
+                <i class="large close icon"></i>
+                <div class="header"></div>
+                <img class="ui centered image">
+            </div> <!-- /modal -->
         </main>
         <script>
         $('.ui.dropdown').dropdown();
-        $('.modal-open').click(function(){
+        $('.video-modal-open').click(function(){
             var modalSrc = $(this).attr('data-url');
+            var modalDesc = $(this).attr('data-desc');
             $('.ui.modal iframe').attr('src', modalSrc) 
-            $('.ui.modal').modal({
+            $('.ui.modal .header').text(modalDesc);
+            $('#video-modal').modal({
                 onHide: function(){
                     $(this).find('iframe').attr('src', '');
                 }
             })
             .modal('show');
+        })
+        $('.image-modal-open').click(function(){
+            var modalSrc = $(this).attr('data-url');
+            var modalDesc = $(this).attr('data-desc');
+            $('.ui.modal img').attr('src', modalSrc) 
+            $('.ui.modal .header').text(modalDesc);
+            $('#image-modal').modal('show');
         })
         </script>
     <%- include('../partials/footer') %>

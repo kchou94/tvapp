@@ -14,9 +14,14 @@ var showSchema = new mongoose.Schema({
     seasons: [{
         name: String,
         videos: [{
-            title: String,
+            description: String,
             url: String,
             thumbnail: String,
+            spoiler: Boolean
+        }],
+        images: [{
+            description: String,
+            url: String,
             spoiler: Boolean
         }]
     }]
