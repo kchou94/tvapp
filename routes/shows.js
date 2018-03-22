@@ -44,6 +44,7 @@ router.get('/new', function(req, res){
 
 router.post('/', upload.single('show[image]'), function(req, res){
   var showData = req.body.show;
+  var tagStr = showData.tags;
   if(tagStr === ''){
     showData.tags = [];
   } else {
@@ -108,6 +109,17 @@ router.put('/:id', upload.single('show[image]'), function(req, res){
   });
 });
 
+/* DESTROY */
+router.delete('/:id', function(req, res){
+  Show.findByIdAndRemove(req.params.id, function(err){
+    if(err){
+      // console.log(err);
+      return res.redirect('back');
+    }
+    res.redirect('/shows');
+  });
+});
+
 /*===========
 Season Routes
 ============*/
@@ -129,7 +141,7 @@ router.post('/:id/seasons', function(req, res){
   Show.findById(id, function(err, showFound){
     if(err) return res.redirect('back');
     showFound.seasons.push(seasonData);
-    console.log(showFound);
+    // console.log(showFound);
     showFound.save(function(err){
       if(err) return res.redirect('back');
       res.redirect('/shows/' + showFound.id);

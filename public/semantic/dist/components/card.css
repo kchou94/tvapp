@@ -995,3 +995,6 @@ a.ui.card:hover,
     User Variable Overrides
 *******************************/
 
+#showcase .ui.link.card:hover {
+  cursor: default;
+}

@@ -6,18 +6,17 @@
                 <a href="/shows/new" class="ui large primary button">Add a show!</a>
             </div>
             <div class="ui vertical very padded segment container">
-                <div class="ui centered cards">
+                <div id="showcase" class="ui centered cards">
                     <% shows.forEach(function(show){ %>
-                    <a href="/shows/<%= show._id %>" class="ui raised link card">
-                        <div class="image">
-                            <img src="<%= show.image %>" alt="<%= show.title %>> poster art">
-                        </div>
+                    <div class="ui raised link card">
+                        <a href="/shows/<%= show._id %>/edit" class="ui right corner label">
+                            <i class="edit icon"></i>
+                        </a>
+                        <a href="/shows/<%= show._id %>" class="image">                 
+                            <img src="<%= show.image %>" alt="<%= show.title %> poster art">
+                        </a>
                         <div class="content">
-                            <div class="right floated meta">
-                                <i class="like icon"></i>
-                                99
-                            </div>
-                            <div class="header"><%= show.title %></div>
+                            <a href="/shows/<%= show._id %>" class="header"><%= show.title %></a>
                             <div class="meta">
                                 <span class="date"><%= show.year %></span>
                                 <span class="foreign-name"><%= show.foreignTitle %></span>
@@ -33,7 +32,7 @@
                                 <% } %>
                             </div>
                         </div>
-                    </a> <!--/card-->
+                    </div> <!--/card-->
                     <% }); %>
                 </div> <!--/cards-->
             </div> <!--/container-->
