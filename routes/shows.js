@@ -173,7 +173,7 @@ router.put('/:showId/seasons/:seasonId', function(req, res){
       return res.redirect('back');
     }
     // console.log(showUpdated);
-    res.redirect('/shows/' + showUpdated.id);
+    res.redirect('/shows/' + showUpdated._id);
   });
 });
 
@@ -229,6 +229,56 @@ router.post('/:showId/seasons/:seasonId/videos', function(req, res){
         res.redirect('back');
       }
       // console.log(season);
+      res.redirect('/shows/' + showId);
+    });
+  });
+});
+
+/* EDIT */
+router.get('/:showId/seasons/:seasonId/videos/:videoId/edit', function(req, res){
+  var showId = req.params.showId;
+  var seasonId = req.params.seasonId;
+  var videoId = req.params.videoId;
+  Show.findById(showId, function(err, showFound){
+    if(err){
+      console.log(err);
+      res.redirect('back');
+    }
+    var season = showFound.seasons.id(seasonId)
+    var video = season.videos.id(videoId);
+    console.log(video);
+    res.render('shows/seasons/videos/edit', {show: showFound, season: season, video: video});
+  });
+});
+
+/* UPDATE */
+router.put('/:showId/seasons/:seasonId/videos/:videoId', function(req, res){
+  var showId = req.params.showId;
+  var seasonId = req.params.seasonId;
+  var videoId = req.params.videoId;
+  var videoData = req.body.video;
+  var urlVideo = videoData.url;
+  var regexVideo = /^(.*?)streamable\.com\/o\//
+  // console.log(videoData);
+  Show.findById(showId, function(err, showFound){
+    if(err){
+      // console.log('oops: ' + err);
+      res.redirect('back');
+    }
+    var season = showFound.seasons.id(seasonId);
+    var video = season.videos.id(videoId);
+    // console.log(urlVideo);
+    if(!regexVideo.test(urlVideo)){
+      urlVideo = urlVideo.replace(/^(.*?)streamable\.com[/\\]/, '//www.streamable.com/o/');
+      videoData.url = urlVideo;
+      videoData.thumbnail = urlVideo.replace(/^(.*?)streamable\.com\/o\//, '//images.streamable.com/east/image/') + '.jpg?height=200';
+    }
+    video.set(videoData);
+    showFound.save(function(err){
+      if(err){
+        // console.log('error: ' + err);
+        res.redirect('back');
+      }
       res.redirect('/shows/' + showId);
     });
   });
