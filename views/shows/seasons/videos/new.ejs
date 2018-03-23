@@ -1,0 +1,43 @@
+<!-- Shows!  Videos! New! -->
+        <%- include('../../../partials/header') %>
+            <div class="ui center aligned inverted vertical very padded segment masthead">
+                <h1 class="ui inverted header"><%= show.title %>
+                    <p class="sub header">Add a Clip to <%= season.name %></p>
+                </h1>
+            </div>
+            <div class="ui vertical very padded segment container">
+                <form class="ui form" action="/shows/<%= show._id %>/seasons/<%= season._id %>/videos" method="POST">
+                    <h2 class="ui dividing header">New Clip</h2>
+                        <div class="field">
+                            <label for="input-desc">Description</label>
+                            <input id="input-desc" type="text" name="video[description]" placeholder="e.g. Season 2 OP">
+                        </div>
+                        <div class="field">
+                            <label for="input-url">Streamable URL</label>
+                            <input id="input-url" type="text" name="video[url]" placeholder="e.g. https://streamable.com/lgmtt">
+                        </div>
+                        <div class="grouped fields">
+                            <label for="video[spoiler]">Does this contain a spoiler?</label>
+                            <div class="field">
+                                <div class="ui radio checkbox">
+                                    <label>Yes</label>
+                                    <input type="radio" name="video[spoiler]" value="true">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui radio checkbox">
+                                    <label>No</label>
+                                    <input type="radio" name="video[spoiler]" value="false">
+                                </div>
+                            </div>                            
+                        </div>
+                        <input class="ui primary large button" type="submit" >
+                </form>
+            </div> <!--/container-->
+        </main>
+        <script>
+            $('.ui.dropdown').dropdown();
+            $('.ui.radio.checkbox').checkbox()
+;
+        </script>
+    <%- include('../../../partials/footer') %>

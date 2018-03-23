@@ -191,4 +191,47 @@ router.delete('/:showId/seasons/:seasonId', function(req, res){
   });
 });
 
+/*===========
+ Video Routes
+============*/
+
+/* NEW */
+router.get('/:showId/seasons/:seasonId/videos/new', function(req, res){
+  var showId = req.params.showId;
+  var seasonId = req.params.seasonId;
+  Show.findById(showId, function(err, showFound){
+    if(err){
+      console.log(err);
+      res.redirect('back');
+    }
+    var season = showFound.seasons.id(seasonId);
+    res.render('shows/seasons/videos/new', {show: showFound, season: season});
+  });
+});
+
+/* CREATE */
+router.post('/:showId/seasons/:seasonId/videos', function(req, res){
+  var showId = req.params.showId;
+  var seasonId = req.params.seasonId;
+  var videoData = req.body.video;
+  videoData.url = videoData.url.replace(/^(.*?)streamable\.com[/\\]/, '//www.streamable.com/o/');
+  videoData.thumbnail = videoData.url.replace(/^(.*?)streamable\.com\/o\//, '//images.streamable.com/east/image/') + '.jpg?height=200';
+  Show.findById(showId, function(err, showFound){
+    if(err){
+      // console.log(err);
+      return res.redirect('back');
+    }
+    var season = showFound.seasons.id(seasonId);
+    season.videos.push(videoData);
+    showFound.save(function(err){
+      if(err){
+        // console.log(err);
+        res.redirect('back');
+      }
+      // console.log(season);
+      res.redirect('/shows/' + showId);
+    });
+  });
+});
+
 module.exports = router;
