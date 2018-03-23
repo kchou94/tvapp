@@ -1,14 +1,13 @@
 <!-- Shows!  Seasons! Edit! -->
         <%- include('../../partials/header') %>
             <div class="ui center aligned inverted vertical very padded segment masthead">
-                <h1 class="ui inverted header">Edit Season</h1>
+                <h1 class="ui inverted header"><%= show.title %>
+                    <p class="sub header">Edit Season</p>
+                </h1>
             </div>
             <div class="ui vertical very padded segment container">
                 <form id="edit-form" class="ui form" action="/shows/<%= show._id %>/seasons/<%= season.id %>?_method=PUT" method="POST">
-                    <h2 class="ui dividing header">
-                        <%= show.title %>
-                        <p class="sub header">Editing name for <%= season.name %></p>
-                    </h2>
+                    <h2 class="ui dividing header"><%= show.title %></h2>
                     <div class="field">
                         <label for="input-name">Update Season Name</label>
                         <input id="input-name" type="text" name="season[name]" placeholder="<%= season.name %>" autofocus>
