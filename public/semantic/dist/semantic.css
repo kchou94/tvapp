@@ -33625,6 +33625,10 @@ select.ui.dropdown {
 /*******************************
          Site Overrides
 *******************************/
+
+.pointer-cursor {
+  cursor: pointer;
+}
 /*!
  * # Semantic UI 2.3.0 - Nag
  * http://github.com/semantic-org/semantic-ui/

@@ -588,3 +588,6 @@
          Site Overrides
 *******************************/
 
+.pointer-cursor {
+  cursor: pointer;
+}

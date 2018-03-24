@@ -246,7 +246,7 @@ router.get('/:showId/seasons/:seasonId/videos/:videoId/edit', function(req, res)
     }
     var season = showFound.seasons.id(seasonId);
     var video = season.videos.id(videoId);
-    console.log(video);
+    // console.log(video);
     res.render('shows/seasons/videos/edit', {show: showFound, season: season, video: video});
   });
 });
@@ -285,6 +285,41 @@ router.put('/:showId/seasons/:seasonId/videos/:videoId', function(req, res){
 });
 
 /* DESTROY */
+router.delete('/:showId/seasons/:seasonId/videos/:videoId', function(req, res){
+  var showId = req.params.showId;
+  var seasonId = req.params.seasonId;
+  var videoId = req.params.videoId;
+  Show.findById(showId, function(err, showFound){
+    if(err){
+      console.log('showfind err: ' + err);
+      res.redirect('back');
+    }
+    var season = showFound.seasons.id(seasonId);
+    var videoArr = season.videos;
+    var videoIndex;
+    // console.log('season: ' + season);
+    // console.log('videos: ' + season.videos);
+    for(var i = 0; i < videoArr.length; i++){
+      if(videoArr[i]._id == videoId){
+        videoIndex = i;
+        // console.log('matching index: ' + videoIndex);
+        break
+      }
+      // console.log('skipped index: ' + i);
+    }
+    if(typeof videoIndex){
+      videoArr.splice(videoIndex, 1);
+      // console.log('after delete: ' + season);
+      showFound.save(function(err){
+        // console.log('saved');
+        res.redirect('/shows/' + showId);
+      })
+    } else {
+      // console.log('err: not found!');
+      res.redirect('back');
+    }  
+  });
+});
 
 
 module.exports = router;

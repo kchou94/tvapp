@@ -54,16 +54,19 @@
                                         <span class="ui header">Clips</span>
                                     </h4>                                                                                                      
                                     <% if(season.videos.length){ %>                                    
-                                    <div class="ui three stackable cards">
+                                    <div class="ui two stackable cards">
                                         <% season.videos.forEach(function(video){ %>
-                                        <a class="link card video-modal-open" data-url="<%= video.url %>" data-desc="<%= video.description %>">
-                                            <div class="image<%= video.spoiler ? ' spoiler' : '' %>">
+                                        <div class="card">
+                                            <div class="video-modal-open pointer-cursor image <%= video.spoiler ? 'spoiler' : '' %>" data-url="<%= video.url %>" data-desc="<%= video.description %>">
                                                 <img src="<%= video.thumbnail %>">
                                             </div>
                                             <div class="content">
                                                 <div class="description"><%= video.description %></div>
                                             </div>
-                                        </a>
+                                            <a class="ui bottom attached button" href="/shows/<%= show._id %>/seasons/<%= season._id %>/videos/<%= video._id %>/edit">
+                                                <i class="edit icon"></i>
+                                            </a>
+                                        </div>
                                         <% }) %>
                                     </div>
                                     <% } else { %>
@@ -84,16 +87,19 @@
                                         <span class="ui header">Images</span>
                                     </h4>                                    
                                     <% if(season.images.length){ %>
-                                    <div class="ui three stackable cards">
+                                    <div class="ui two stackable cards">
                                         <% season.images.forEach(function(image){ %>
-                                        <a class="link card image-modal-open" data-url="<%= image.url %>" data-desc="<%= image.description %>">
-                                            <div class="image<%= image.spoiler ? ' spoiler' : '' %>">
+                                        <div class="card" data-url="<%= image.url %>" data-desc="<%= image.description %>">
+                                            <div class="image-modal-open pointer-cursor image <%= image.spoiler ? 'spoiler' : '' %>">
                                                 <img src="<%= image.url %>">
                                             </div>
                                             <div class="content">
                                                 <div class="description"><%= image.description %></div>
                                             </div>
-                                        </a>
+                                            <a class="ui bottom attached button" href="/shows/<%= show._id %>/seasons/<%= season._id %>/images/<%= image._id %>/edit">
+                                                <i class="edit icon"></i>
+                                            </a>
+                                        </div>
                                         <% }) %>
                                     </div>
                                     <% } else { %>

@@ -35,7 +35,10 @@
                                 </div>
                             </div>                            
                         </div>
-                        <input class="ui primary large button" type="submit" >
+                        <input class="ui primary large fluid button" type="submit" >
+                </form>
+                <form id="delete-form" class="ui form" action="/shows/<%= show._id %>/seasons/<%= season._id %>/videos/<%= video._id %>?_method=DELETE" method="POST">
+                    <input class="ui large basic fluid negative button" type="submit" value="Delete">
                 </form>
             </div> <!--/container-->
         </main>
