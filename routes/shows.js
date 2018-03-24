@@ -65,7 +65,7 @@ router.post('/', upload.single('show[image]'), function(req, res){
   } else {
     showData.tags = tagStr.split(',');
   }
-  showData.image =  req.file.url;
+  showData.image =  req.file.secure_url;
   Show.create(showData, function(err, showCreated){
     if(err){
       // console.log(err);
@@ -129,8 +129,9 @@ router.put('/:id', upload.single('show[image]'), function(req, res){
   // console.log('after: ' + showData.tags);
   // console.log(req.file);
   if(req.file){
-    newPath = req.file.path.substring(req.file.path.indexOf('public\\') + 7);
-    showData.image = newPath;
+    showData.image =  req.file.secure_url;
+    // newPath = req.file.path.substring(req.file.path.indexOf('public\\') + 7);
+    // showData.image = newPath;
   }
   Show.findByIdAndUpdate(req.params.id, showData, function(err, showUpdated){
     if(err){
