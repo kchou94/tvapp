@@ -244,7 +244,7 @@ router.get('/:showId/seasons/:seasonId/videos/:videoId/edit', function(req, res)
       console.log(err);
       res.redirect('back');
     }
-    var season = showFound.seasons.id(seasonId)
+    var season = showFound.seasons.id(seasonId);
     var video = season.videos.id(videoId);
     console.log(video);
     res.render('shows/seasons/videos/edit', {show: showFound, season: season, video: video});
@@ -283,5 +283,8 @@ router.put('/:showId/seasons/:seasonId/videos/:videoId', function(req, res){
     });
   });
 });
+
+/* DESTROY */
+
 
 module.exports = router;
