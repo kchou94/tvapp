@@ -9,6 +9,7 @@ var methodOverride = require('method-override')
 if(process.env.NODE_ENV !== 'production'){
   require('dotenv').config();
 }
+var cloudinary = require('cloudinary');
 
 var index = require('./routes/index');
 var shows = require('./routes/shows');
@@ -31,6 +32,13 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

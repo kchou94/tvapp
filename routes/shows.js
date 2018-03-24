@@ -7,20 +7,35 @@ var express = require('express');
 var router = express.Router();
 var crypto = require('crypto');
 var path = require('path');
+var cloudinary = require('cloudinary');
+var cloudinaryStorage = require('multer-storage-cloudinary');
 var multer = require('multer');
-
+if(process.env.NODE_ENV !== 'production'){
+  require('dotenv').config();
+}
 
 var Show = require('../models/show');
 
-var storage = multer.diskStorage({
-  destination: 'public/uploads',
+var storage = cloudinaryStorage({
+  cloudinary: cloudinary,
+  folder: process.env.CLOUDINARY_FOLDER,
   filename: function(req, file, cb){
     crypto.randomBytes(16, function(err, buf){
       if (err) return console.log(err);
-      cb(null, buf.toString('hex') + Date.now() + path.extname(file.originalname));
+      cb(null, buf.toString('hex') + Date.now());
     })
   }
 });
+
+// var storage = multer.diskStorage({
+//   destination: 'public/uploads',
+//   filename: function(req, file, cb){
+//     crypto.randomBytes(16, function(err, buf){
+//       if (err) return console.log(err);
+//       cb(null, buf.toString('hex') + Date.now() + path.extname(file.originalname));
+//     })
+//   }
+// });
 var upload = multer({storage: storage});
 
 /*===========
@@ -50,8 +65,7 @@ router.post('/', upload.single('show[image]'), function(req, res){
   } else {
     showData.tags = tagStr.split(',');
   }
-  newPath = req.file.path.substring(req.file.path.indexOf('public\\') + 7);
-  showData.image = newPath;
+  showData.image =  req.file.url;
   Show.create(showData, function(err, showCreated){
     if(err){
       // console.log(err);
@@ -60,6 +74,25 @@ router.post('/', upload.single('show[image]'), function(req, res){
     res.redirect('/shows');
   });
 });
+
+// router.post('/', upload.single('show[image]'), function(req, res){
+//   var showData = req.body.show;
+//   var tagStr = showData.tags;
+//   if(tagStr === ''){
+//     showData.tags = [];
+//   } else {
+//     showData.tags = tagStr.split(',');
+//   }
+//   var newPath = req.file.path.substring(req.file.path.indexOf('public\\') + 7);
+//   showData.image = newPath;
+//   Show.create(showData, function(err, showCreated){
+//     if(err){
+//       // console.log(err);
+//       return res.redirect('back');
+//     } 
+//     res.redirect('/shows');
+//   });
+// });
 
 /* SHOW */
 router.get('/:id', function(req, res) {
