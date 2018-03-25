@@ -40,7 +40,6 @@
                             <% if(show.seasons[0]){ %>
                             <% show.seasons.forEach(function(season){ %>
                             <div class="ui segment">
-                                    <div style="width:100%;height:0px;position:relative;padding-bottom:56.250%;"><iframe src="https://streamable.com/s/yfj1a/uvston" frameborder="0" width="100%" height="100%" allowfullscreen style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow:hidden;"></iframe></div>
                                 <h3>
                                     <a href="/shows/<%= show._id %>/seasons/<%= season._id %>/edit" id="edit-button" class="circular compact left floated ui small basic icon button">
                                         <i class="edit icon"></i>
@@ -58,9 +57,9 @@
                                     <div class="ui two stackable cards">
                                         <% season.videos.forEach(function(video){ %>
                                         <div class="card">
-                                            <div class="video-modal-open pointer-cursor image <%= video.spoiler ? 'spoiler' : '' %>" data-url="<%= video.url %>" data-desc="<%= video.description %>">
+                                            <a href="<%= video.url %>" class="video-modal-open pointer-cursor image <%= video.spoiler ? 'spoiler' : '' %>" data-url="<%= video.url %>" data-desc="<%= video.description %>">
                                                 <img src="<%= video.thumbnail %>">
-                                            </div>
+                                            </a>
                                             <div class="content">
                                                 <div class="description"><%= video.description %></div>
                                             </div>
@@ -130,13 +129,13 @@
                     </div>
                 </div>
             </div> <!--/container-->
-            <div id="video-modal" class="ui basic modal">
+            <!-- <div id="video-modal" class="ui basic modal">
                 <i class="large close icon"></i>
                 <div class="header"></div>
                 <div style="width:100%;height:0px;position:relative;padding-bottom:56.250%;">
                     <iframe src="" frameborder="0" width="100%" height="100%" allowfullscreen style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow:hidden;"></iframe>
                 </div>
-            </div> <!-- /modal -->
+            </div>  -->
             <div id="image-modal" class="ui basic modal">
                 <i class="large close icon"></i>
                 <div class="header"></div>
