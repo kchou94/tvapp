@@ -65,7 +65,10 @@ router.post('/', upload.single('show[image]'), function(req, res){
   } else {
     showData.tags = tagStr.split(',');
   }
-  showData.image =  req.file.secure_url;
+  if(showData.image){
+    showData.image =  req.file.secure_url;
+  }
+
   Show.create(showData, function(err, showCreated){
     if(err){
       // console.log(err);
@@ -122,7 +125,7 @@ router.put('/:id', upload.single('show[image]'), function(req, res){
   // console.log('desc: ' + showData.description);
   // console.log('before: ' + showData.tags);
   if(tagStr === ''){
-    showData.tags = [];
+    delete showData.tags;
   } else {
     showData.tags = tagStr.split(',');
   }

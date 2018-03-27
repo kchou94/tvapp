@@ -10,7 +10,7 @@
                     <h2 class="ui dividing header">Title</h2>
                         <div class="field">
                             <label for="input-title">English Title</label>
-                            <input id="input-title" type="text" name="show[title]" value="<%= show.title %>">
+                            <input id="input-title" type="text" name="show[title]" value="<%= show.title %>" required>
                         </div>
                         <div class="field">
                             <label for="input-foreign-title">Foreign Title</label>
@@ -24,7 +24,7 @@
                             </div>
                             <div class="column">
                                 <h3 class="ui small centered header">Existing Image:</h3>
-                                <img class="ui small centered image" src="/<%= show.image %>">
+                                <img class="ui small centered image" src="<%= show.image %>">
                             </div>
                         </div>
                         
@@ -43,7 +43,7 @@
                                 <div class="default text">Separate tags with commas</div>
                             </div>
                             <div class="ui pointing orange basic label">
-                                These will overwrite all existing tags! Make sure to include tags you want to keep.
+                                Filling this out overwrites all tags! Make sure to include tags you want to keep.
                             </div>
                         </div>
                         <p>
