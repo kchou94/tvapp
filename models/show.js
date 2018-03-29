@@ -22,6 +22,7 @@ var showSchema = new mongoose.Schema({
         images: [{
             description: String,
             url: String,
+            thumbnail: String,
             spoiler: Boolean
         }]
     }]

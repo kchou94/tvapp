@@ -1,37 +1,44 @@
-<!-- Shows! Videos! New! -->
+<!-- Shows!  Images! Edit! -->
         <%- include('../../../partials/header') %>
             <div class="ui center aligned inverted vertical very padded segment masthead">
                 <h1 class="ui inverted header"><%= show.title %>
-                    <p class="sub header">Add a Clip to <%= season.name %></p>
+                    <p class="sub header">Edit Clip in <%= season.name %></p>
                 </h1>
             </div>
             <div class="ui vertical very padded segment container">
-                <form class="ui form" action="/shows/<%= show._id %>/seasons/<%= season._id %>/videos" method="POST">
-                    <h2 class="ui dividing header">New Clip</h2>
+                <form class="ui form" action="/shows/<%= show._id %>/seasons/<%= season._id %>/videos/<%= video._id %>?_method=PUT" method="POST">
+                    <h2 class="ui dividing header">Edit Clip</h2>
                         <div class="field">
                             <label for="input-desc">Description</label>
-                            <input id="input-desc" type="text" name="video[description]" placeholder="e.g. Season 2 OP" required>
+                            <input id="input-desc" type="text" name="video[description]" value="<%= video.description %>" required>
                         </div>
                         <div class="field">
                             <label for="input-url">Streamable URL</label>
-                            <input id="input-url" type="text" name="video[url]" placeholder="e.g. https://streamable.com/lgmtt" required>
+                            <input id="input-url" type="text" name="video[url]" value="<%= video.url %>" required pattern="(.*?)streamable.com/(.*?)">
                         </div>
                         <div class="grouped fields">
                             <label for="video[spoiler]">Does this contain a spoiler?</label>
                             <div class="field">
                                 <div class="ui radio checkbox">
                                     <label>Yes</label>
-                                    <input type="radio" name="video[spoiler]" value="true">
+                                    <input type="radio" name="video[spoiler]" value="true"
+                                        <%= video.spoiler ? 'checked' : '' %>
+                                    >
                                 </div>
                             </div>
                             <div class="field">
                                 <div class="ui radio checkbox">
                                     <label>No</label>
-                                    <input type="radio" name="video[spoiler]" value="false">
+                                    <input type="radio" name="video[spoiler]" value="false"
+                                        <%= !video.spoiler ? 'checked' : '' %>
+                                    >
                                 </div>
                             </div>                            
                         </div>
-                        <input class="ui primary large button" type="submit" >
+                        <input class="ui primary large fluid button" type="submit" >
+                </form>
+                <form id="delete-form" class="ui form" action="/shows/<%= show._id %>/seasons/<%= season._id %>/videos/<%= video._id %>?_method=DELETE" method="POST">
+                    <input class="ui large basic fluid negative button" type="submit" value="Delete">
                 </form>
             </div> <!--/container-->
         </main>

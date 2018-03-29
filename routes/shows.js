@@ -66,7 +66,7 @@ router.post('/', upload.single('show[image]'), function(req, res){
     showData.tags = tagStr.split(',');
   }
   if(showData.image){
-    showData.image =  req.file.secure_url;
+    showData.image = req.file.secure_url;
   }
 
   Show.create(showData, function(err, showCreated){
@@ -238,7 +238,7 @@ router.get('/:showId/seasons/:seasonId/videos/new', function(req, res){
   var seasonId = req.params.seasonId;
   Show.findById(showId, function(err, showFound){
     if(err){
-      console.log(err);
+      // console.log(err);
       res.redirect('back');
     }
     var season = showFound.seasons.id(seasonId);
@@ -358,5 +358,48 @@ router.delete('/:showId/seasons/:seasonId/videos/:videoId', function(req, res){
   });
 });
 
+/*============
+ Image Routes
+=============*/
+
+/* NEW */
+router.get('/:showId/seasons/:seasonId/images/new', function(req, res){
+  var showId = req.params.showId;
+  var seasonId = req.params.seasonId;
+  Show.findById(showId, function(err, showFound){
+    if(err){
+      // console.log(err);
+      res.redirect('back');
+    }
+    var season = showFound.seasons.id(seasonId);
+    res.render('shows/seasons/images/new', {show: showFound, season: season});
+  });
+});
+
+/* CREATE */
+router.post('/:showId/seasons/:seasonId/images', upload.single('img[upload]'), function(req, res){
+  var showId = req.params.showId;
+  var seasonId = req.params.seasonId;
+  var imgData = req.body.img;
+  var imgAPI = req.file;
+  imgData.url = imgAPI.secure_url;
+  imgData.thumbnail = cloudinary.url(imgAPI.public_id + '.' + imgAPI.format, {secure: true, height: 200});
+  // console.log(imgData);
+  Show.findById(showId, function(err, showFound){
+    if(err){
+      console.log(err);
+      return res.redirect('back');
+    }
+    var season = showFound.seasons.id(seasonId);
+    season.images.push(imgData);
+    showFound.save(function(err){
+      if(err){
+        console.log(err);
+        return res.redirect('back');
+      }
+      return res.redirect('/shows/' + showId);
+    });
+  });
+});
 
 module.exports = router;

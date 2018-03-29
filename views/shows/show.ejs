@@ -89,9 +89,9 @@
                                     <% if(season.images.length){ %>
                                     <div class="ui two stackable cards">
                                         <% season.images.forEach(function(image){ %>
-                                        <div class="card" data-url="<%= image.url %>" data-desc="<%= image.description %>">
-                                            <div class="image-modal-open pointer-cursor image <%= image.spoiler ? 'spoiler' : '' %>">
-                                                <img src="<%= image.url %>">
+                                        <div class="card">
+                                            <div class="image-modal-open pointer-cursor image <%= image.spoiler ? 'spoiler' : '' %>" data-url="<%= image.url %>" data-desc="<%= image.description %>">
+                                                <img src="<%= image.thumbnail %>">
                                             </div>
                                             <div class="content">
                                                 <div class="description"><%= image.description %></div>
@@ -136,7 +136,7 @@
                     <iframe src="" frameborder="0" width="100%" height="100%" allowfullscreen style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow:hidden;"></iframe>
                 </div>
             </div>  -->
-            <div id="image-modal" class="ui basic modal">
+            <div id="image-modal" class="ui basic large modal">
                 <i class="large close icon"></i>
                 <div class="header"></div>
                 <img class="ui centered image">
