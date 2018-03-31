@@ -48,7 +48,6 @@
             .ui.segment.masthead{
                 padding-top: 100px;
                 overflow: hidden;
-                z-index: -5;
             }
 
             nav.ui.inverted.menu{
@@ -102,7 +101,7 @@
                 left: 50%;
                 transform: translate(-50%, -30%);
                 filter: blur(4px);
-                z-index: -2;
+                z-index: 0;
                 animation: fadeIn ease-in 1s;
             }
 
@@ -154,6 +153,10 @@
                 left: 0;
                 top: 0;
                 opacity: 0.05;
+            }
+
+            .masthead > #dot-overlay{
+                z-index: 1;
             }
 
             #star-left{

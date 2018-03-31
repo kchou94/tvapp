@@ -145,6 +145,16 @@ router.put('/:id', upload.single('show[image]'), function(req, res){
       // console.log(err);
       return res.redirect('back');
     }
+    var imgToDeleteURL = showUpdated.image;
+    var regex = new RegExp('^(.*?)res\\.cloudinary\\.com\\/' + process.env.CLOUDINARY_NAME + '\/(.*?)\/(' + process.env.CLOUDINARY_FOLDER + '\/(.*?))\\.(.*)');
+    var imgToDeleteMatches = imgToDeleteURL.match(regex);
+    cloudinary.v2.uploader.destroy(imgToDeleteMatches[3], function(error, result){
+      if(error){
+        // console.log(error);
+        return
+      }
+      // console.log(result);
+    });
     // console.log(showUpdated);
     res.redirect('/shows/' + showUpdated._id);
   });
@@ -152,11 +162,21 @@ router.put('/:id', upload.single('show[image]'), function(req, res){
 
 /* DESTROY */
 router.delete('/:id', function(req, res){
-  Show.findByIdAndRemove(req.params.id, function(err){
+  Show.findByIdAndRemove(req.params.id, function(err, showRemoved){
     if(err){
       // console.log(err);
       return res.redirect('back');
     }
+    var imgToDeleteURL = showRemoved.image;
+    var regex = new RegExp('^(.*?)res\\.cloudinary\\.com\\/' + process.env.CLOUDINARY_NAME + '\/(.*?)\/(' + process.env.CLOUDINARY_FOLDER + '\/(.*?))\\.(.*)');
+    var imgToDeleteMatches = imgToDeleteURL.match(regex);
+    cloudinary.v2.uploader.destroy(imgToDeleteMatches[3], function(error, result){
+      if(error){
+        // console.log(error);
+        return
+      }
+      // console.log(result);
+    });
     res.redirect('/shows');
   });
 });
@@ -442,12 +462,22 @@ router.put('/:showId/seasons/:seasonId/images/:imageId', upload.single('img[uplo
     }
     var season = showFound.seasons.id(seasonId);
     var image = season.images.id(imageId);
+    var imgToDeleteURL = image.url;
     image.set(imgData);
     showFound.save(function(err){
       if(err){
         // console.log('error: ' + err);
         return res.redirect('back');
       }
+      var regex = new RegExp('^(.*?)res\\.cloudinary\\.com\\/' + process.env.CLOUDINARY_NAME + '\/(.*?)\/(' + process.env.CLOUDINARY_FOLDER + '\/(.*?))\\.(.*)');
+      var imgToDeleteMatches = imgToDeleteURL.match(regex);
+      cloudinary.v2.uploader.destroy(imgToDeleteMatches[3], function(error, result){
+        if(error){
+          // console.log(error);
+          return
+        }
+        // console.log(result);
+      });
       res.redirect('/shows/' + showId);
     });
   });
@@ -474,8 +504,19 @@ router.delete('/:showId/seasons/:seasonId/images/:imageId', function(req, res){
       }
     }
     if(typeof imgIndex){
+      var regex = new RegExp('^(.*?)res\\.cloudinary\\.com\\/' + process.env.CLOUDINARY_NAME + '\/(.*?)\/(' + process.env.CLOUDINARY_FOLDER + '\/(.*?))\\.(.*)');
+      var imgAPIId = imgArr[imgIndex].url.match(regex);
+      // console.log(regex);
+      // console.log(imgAPIId);
+      cloudinary.v2.uploader.destroy(imgAPIId[3], function(error, result){
+        if(error){
+          // console.log(error);
+          return
+        }
+        // console.log(result);
+      });
       imgArr.splice(imgIndex, 1);
-      // console.log('deleted');
+      // console.log('deleted');      
       showFound.save(function(err){
         // console.log('saved');
         res.redirect('/shows/' + showId);
