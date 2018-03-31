@@ -26,7 +26,11 @@ var showSchema = new mongoose.Schema({
             thumbnail: String,
             spoiler: Boolean
         }]
-    }]
+    }],
+    schemaVersion: {
+        type: Number,
+        default: 0.1
+    }
 });
 
 var Show = mongoose.model('Show', showSchema);
