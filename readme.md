@@ -21,12 +21,12 @@ Note: (?) denotes less important features
         - ~~Image gallery~~
         - User ratings/comments (?)
         - Recommendations (?)
-    - User-submitted clips
-        - Add new clips (probably from Streamable etc.)
-        - Delete clips
-    - User-submitted images
-        - Add new images
-        - Delete images
+    - ~~User-submitted clips~~
+        - ~~Add new clips (probably from Streamable etc.)~~
+        - ~~Delete clips~~
+    - ~~User-submitted images~~
+        - ~~Add new images~~
+        - ~~Delete images~~
     - Categories (?)
     - Sorting (?)
     - Searching (?)
