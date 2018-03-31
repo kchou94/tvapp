@@ -87,7 +87,7 @@
                                         <span class="ui header">Images</span>
                                     </h4>                                    
                                     <% if(season.images.length){ %>
-                                    <div class="ui two stackable cards">
+                                    <div class="img-gallery ui two stackable cards">
                                         <% season.images.forEach(function(image){ %>
                                         <div class="card">
                                             <div class="image-modal-open pointer-cursor image <%= image.spoiler ? 'spoiler' : '' %>" data-url="<%= image.url %>" data-desc="<%= image.description %>">
@@ -136,7 +136,7 @@
                     <iframe src="" frameborder="0" width="100%" height="100%" allowfullscreen style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow:hidden;"></iframe>
                 </div>
             </div>  -->
-            <div id="image-modal" class="ui basic large modal">
+            <div id="image-modal" class="ui basic fullscreen modal">
                 <i class="large close icon"></i>
                 <div class="header"></div>
                 <img class="ui centered image">
@@ -161,6 +161,7 @@
             var modalDesc = $(this).attr('data-desc');
             $('.ui.modal img').attr('src', modalSrc) 
             $('.ui.modal .header').text(modalDesc);
+            $('#image-modal').modal('refresh');
             $('#image-modal').modal('show');
         })
         </script>
