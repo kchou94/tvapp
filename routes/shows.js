@@ -65,8 +65,10 @@ router.post('/', upload.single('show[image]'), function(req, res){
   } else {
     showData.tags = tagStr.split(',');
   }
-  if(showData.image){
-    showData.image = req.file.secure_url;
+  if(req.file){
+    var imgAPI = req.file;
+    showData.image = imgAPI.secure_url;
+    showData.thumbnail = cloudinary.url(imgAPI.public_id + '.' + imgAPI.format, {secure: true, height: 400});
   }
 
   Show.create(showData, function(err, showCreated){
@@ -132,7 +134,9 @@ router.put('/:id', upload.single('show[image]'), function(req, res){
   // console.log('after: ' + showData.tags);
   // console.log(req.file);
   if(req.file){
-    showData.image =  req.file.secure_url;
+    var imgAPI = req.file;
+    showData.image =  imgAPI.secure_url;
+    showData.thumbnail = cloudinary.url(imgAPI.public_id + '.' + imgAPI.format, {secure: true, height: 400});
     // newPath = req.file.path.substring(req.file.path.indexOf('public\\') + 7);
     // showData.image = newPath;
   }
@@ -278,7 +282,7 @@ router.get('/:showId/seasons/:seasonId/videos/:videoId/edit', function(req, res)
   var videoId = req.params.videoId;
   Show.findById(showId, function(err, showFound){
     if(err){
-      console.log(err);
+      // console.log(err);
       res.redirect('back');
     }
     var season = showFound.seasons.id(seasonId);
@@ -328,7 +332,7 @@ router.delete('/:showId/seasons/:seasonId/videos/:videoId', function(req, res){
   var videoId = req.params.videoId;
   Show.findById(showId, function(err, showFound){
     if(err){
-      console.log('showfind err: ' + err);
+      // console.log('showfind err: ' + err);
       res.redirect('back');
     }
     var season = showFound.seasons.id(seasonId);
@@ -387,18 +391,99 @@ router.post('/:showId/seasons/:seasonId/images', upload.single('img[upload]'), f
   // console.log(imgData);
   Show.findById(showId, function(err, showFound){
     if(err){
-      console.log(err);
+      // console.log(err);
       return res.redirect('back');
     }
     var season = showFound.seasons.id(seasonId);
     season.images.push(imgData);
     showFound.save(function(err){
       if(err){
-        console.log(err);
+        // console.log(err);
         return res.redirect('back');
       }
       return res.redirect('/shows/' + showId);
     });
+  });
+});
+
+/* EDIT */
+router.get('/:showId/seasons/:seasonId/images/:imageId/edit', function(req, res){
+  var showId = req.params.showId;
+  var seasonId = req.params.seasonId;
+  var imageId = req.params.imageId;
+  Show.findById(showId, function(err, showFound){
+    if(err){
+      // console.log(err);
+      res.redirect('back');
+    }
+    var season = showFound.seasons.id(seasonId);
+    var image = season.images.id(imageId);
+    // console.log(image);
+    res.render('shows/seasons/images/edit', {show: showFound, season: season, image: image});
+  });
+});
+
+/* UPDATE */
+router.put('/:showId/seasons/:seasonId/images/:imageId', upload.single('img[upload]'), function(req, res){
+  var showId = req.params.showId;
+  var seasonId = req.params.seasonId;
+  var imageId = req.params.imageId;
+  var imgData = req.body.img;
+  if(req.file){
+    var imgAPI = req.file;
+    imgData.url = imgAPI.secure_url;
+    imgData.thumbnail = cloudinary.url(imgAPI.public_id + '.' + imgAPI.format, {secure: true, height: 200});
+  }
+  // console.log(imgData);
+  Show.findById(showId, function(err, showFound){
+    if(err){
+      // console.log(err);
+      res.redirect('back');
+    }
+    var season = showFound.seasons.id(seasonId);
+    var image = season.images.id(imageId);
+    image.set(imgData);
+    showFound.save(function(err){
+      if(err){
+        // console.log('error: ' + err);
+        return res.redirect('back');
+      }
+      res.redirect('/shows/' + showId);
+    });
+  });
+});
+
+/* DESTROY */
+router.delete('/:showId/seasons/:seasonId/images/:imageId', function(req, res){
+  var showId = req.params.showId;
+  var seasonId = req.params.seasonId;
+  var imgId = req.params.imageId;
+  Show.findById(showId, function(err, showFound){
+    if(err){
+      // console.log(err);
+      res.redirect('back');
+    }
+    var season = showFound.seasons.id(seasonId);
+    var imgArr = season.images;
+    var imgIndex;
+    for(var i = 0; i < imgArr.length; i++){
+      if(imgArr[i]._id == imgId){
+        // console.log('match: ' + imgArr[i]);
+        imgIndex = i;
+        break
+      }
+    }
+    if(typeof imgIndex){
+      imgArr.splice(imgIndex, 1);
+      // console.log('deleted');
+      showFound.save(function(err){
+        // console.log('saved');
+        res.redirect('/shows/' + showId);
+      });
+    } else {
+      // console.log('err not found');
+      res.redirect('back');
+    }
   });
 });
 

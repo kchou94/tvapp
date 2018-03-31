@@ -8,6 +8,7 @@ var showSchema = new mongoose.Schema({
     title: String,
     foreignTitle: String,
     image: String,
+    thumbnail: String,
     description: String,
     year: Number,
     tags: [String],

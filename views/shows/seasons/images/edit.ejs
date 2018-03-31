@@ -2,42 +2,48 @@
         <%- include('../../../partials/header') %>
             <div class="ui center aligned inverted vertical very padded segment masthead">
                 <h1 class="ui inverted header"><%= show.title %>
-                    <p class="sub header">Edit Clip in <%= season.name %></p>
+                    <p class="sub header">Edit Image in <%= season.name %></p>
                 </h1>
             </div>
             <div class="ui vertical very padded segment container">
-                <form class="ui form" action="/shows/<%= show._id %>/seasons/<%= season._id %>/videos/<%= video._id %>?_method=PUT" method="POST">
-                    <h2 class="ui dividing header">Edit Clip</h2>
+                <form class="ui form" enctype="multipart/form-data" action="/shows/<%= show._id %>/seasons/<%= season._id %>/images/<%= image._id %>?_method=PUT" method="POST">
+                    <h2 class="ui dividing header">Edit Image</h2>
                         <div class="field">
                             <label for="input-desc">Description</label>
-                            <input id="input-desc" type="text" name="video[description]" value="<%= video.description %>" required>
+                            <input id="input-desc" type="text" name="img[description]" value="<%= image.description %>" required>
                         </div>
-                        <div class="field">
-                            <label for="input-url">Streamable URL</label>
-                            <input id="input-url" type="text" name="video[url]" value="<%= video.url %>" required pattern="(.*?)streamable.com/(.*?)">
-                        </div>
+                        <div class="ui two column middle aligned stackable grid">
+                            <div class="field column">
+                                <label for="input-img">Image</label>
+                                <input id="input-img" type="file" name="img[upload]">
+                            </div>
+                            <div class="column">
+                                <h3 class="ui small centered header">Existing Image:</h3>
+                                <img class="ui small centered image" src="<%= image.thumbnail %>">
+                            </div>
+                        </div>                        
                         <div class="grouped fields">
-                            <label for="video[spoiler]">Does this contain a spoiler?</label>
+                            <label for="img[spoiler]">Does this contain a spoiler?</label>
                             <div class="field">
                                 <div class="ui radio checkbox">
                                     <label>Yes</label>
-                                    <input type="radio" name="video[spoiler]" value="true"
-                                        <%= video.spoiler ? 'checked' : '' %>
+                                    <input type="radio" name="img[spoiler]" value="true"
+                                        <%= image.spoiler ? 'checked' : '' %>
                                     >
                                 </div>
                             </div>
                             <div class="field">
                                 <div class="ui radio checkbox">
                                     <label>No</label>
-                                    <input type="radio" name="video[spoiler]" value="false"
-                                        <%= !video.spoiler ? 'checked' : '' %>
+                                    <input type="radio" name="img[spoiler]" value="false"
+                                        <%= !image.spoiler ? 'checked' : '' %>
                                     >
                                 </div>
                             </div>                            
                         </div>
                         <input class="ui primary large fluid button" type="submit" >
                 </form>
-                <form id="delete-form" class="ui form" action="/shows/<%= show._id %>/seasons/<%= season._id %>/videos/<%= video._id %>?_method=DELETE" method="POST">
+                <form id="delete-form" class="ui form" action="/shows/<%= show._id %>/seasons/<%= season._id %>/images/<%= image._id %>?_method=DELETE" method="POST">
                     <input class="ui large basic fluid negative button" type="submit" value="Delete">
                 </form>
             </div> <!--/container-->
