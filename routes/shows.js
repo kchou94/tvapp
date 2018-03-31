@@ -46,13 +46,13 @@ Show Routes
 router.get('/', function(req, res) {
   Show.find({}, function(err, showsFound){
     if(err) return res.redirect('back');
-    res.render('shows/index', {page: 'shows', shows: showsFound});
+    res.render('shows/index', {page: 'Shows', shows: showsFound});
   })
 });
 
 /* NEW */
 router.get('/new', function(req, res){
-  res.render('shows/new');
+  res.render('shows/new', {page: 'Add Show'});
 });
 
 /* CREATE */
@@ -103,7 +103,7 @@ router.post('/', upload.single('show[image]'), function(req, res){
 router.get('/:id', function(req, res) {
   Show.findById(req.params.id, function(err, showFound){
     if(err) return res.redirect('back');
-    res.render('shows/show', {show: showFound});
+    res.render('shows/show', {show: showFound, page: showFound.title});
   });
 });
 
@@ -115,7 +115,7 @@ router.get('/:id/edit', function(req, res){
       return res.redirect('back');
     }
     // console.log(showFound);
-    res.render('shows/edit', {show: showFound});
+    res.render('shows/edit', {show: showFound, page: showFound.title + ' | Edit Show'});
   });
 });
 
@@ -190,7 +190,7 @@ router.get('/:id/seasons/new', function(req, res){
   var id = req.params.id;
   Show.findById(id, function(err, showFound){
     if(err) return res.redirect('back');
-    res.render('shows/seasons/new', {show: showFound});
+    res.render('shows/seasons/new', {show: showFound, page: showFound.title + ' | Add Season'});
   });
 });
 
@@ -219,7 +219,7 @@ router.get('/:showId/seasons/:seasonId/edit', function(req, res){
     if(err) return res.redirect('back');
     var season = showFound.seasons.id(seasonId);
     // console.log(season);
-    res.render('shows/seasons/edit', {show: showFound, season: season});
+    res.render('shows/seasons/edit', {show: showFound, season: season, page: showFound.title + ' | Edit Season: ' + season.name});
   });
 });
 
@@ -266,7 +266,7 @@ router.get('/:showId/seasons/:seasonId/videos/new', function(req, res){
       res.redirect('back');
     }
     var season = showFound.seasons.id(seasonId);
-    res.render('shows/seasons/videos/new', {show: showFound, season: season});
+    res.render('shows/seasons/videos/new', {show: showFound, season: season, page: showFound.title + ' | Add Video'});
   });
 });
 
@@ -308,7 +308,7 @@ router.get('/:showId/seasons/:seasonId/videos/:videoId/edit', function(req, res)
     var season = showFound.seasons.id(seasonId);
     var video = season.videos.id(videoId);
     // console.log(video);
-    res.render('shows/seasons/videos/edit', {show: showFound, season: season, video: video});
+    res.render('shows/seasons/videos/edit', {show: showFound, season: season, video: video, page: showFound.title + ' | Edit Video: ' + video.description});
   });
 });
 
@@ -396,7 +396,7 @@ router.get('/:showId/seasons/:seasonId/images/new', function(req, res){
       res.redirect('back');
     }
     var season = showFound.seasons.id(seasonId);
-    res.render('shows/seasons/images/new', {show: showFound, season: season});
+    res.render('shows/seasons/images/new', {show: showFound, season: season, page: showFound.title + ' | Add Image'});
   });
 });
 
@@ -439,7 +439,7 @@ router.get('/:showId/seasons/:seasonId/images/:imageId/edit', function(req, res)
     var season = showFound.seasons.id(seasonId);
     var image = season.images.id(imageId);
     // console.log(image);
-    res.render('shows/seasons/images/edit', {show: showFound, season: season, image: image});
+    res.render('shows/seasons/images/edit', {show: showFound, season: season, image: image, page: showFound.title + ' | Edit Image: ' + image.description});
   });
 });
 
