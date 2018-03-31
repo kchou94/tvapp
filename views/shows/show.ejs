@@ -1,9 +1,11 @@
 <!-- Shows!  Index! -->
         <%- include('../partials/header') %>
-            <div class="ui center aligned inverted vertical very padded segment masthead">
+            <div class="ui center aligned inverted vertical very padded segment masthead">  
+                <img id="imgheader" src="<%= show.image %>">                
                 <h1 class="ui inverted header"><%= show.title %>
                     <p class="sub header"><%= show.foreignTitle %></p>
                 </h1>
+                <div id="dot-overlay"></div>
             </div>
             <div id="content" class="ui vertical very padded segment container">
                 <div class="ui centered stackable grid">

@@ -47,6 +47,8 @@
 
             .ui.segment.masthead{
                 padding-top: 100px;
+                overflow: hidden;
+                z-index: -5;
             }
 
             nav.ui.inverted.menu{
@@ -93,6 +95,44 @@
                 filter: blur(4px);
             }
 
+            #imgheader{
+                width: 100%;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -30%);
+                filter: blur(4px);
+                z-index: -2;
+                animation: fadeIn ease-in 1s;
+            }
+
+            @keyframes fadeIn {
+                from{ 
+                    opacity: 0; 
+                }
+                to{ 
+                    opacity: 1;
+                }
+            }
+
+            #imgheader + h1{
+                z-index: 1;
+                width: 40%;
+                position: relative;
+                margin: 50px auto;
+                background: rgba(0, 0, 0, 0.7);
+                padding: 30px;
+                border-bottom: solid 2px rgba(255, 255, 255, 0.8);
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+            }
+
+            @media (max-width: 768px){
+                #imgheader + h1{
+                width: 70%;
+                }
+            }
+
             #bg-video{
                 min-height: 101%;
                 min-width: 101%;
@@ -107,13 +147,12 @@
 
             #dot-overlay{
                 background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAHUlEQVQYV2NkYGD4zwABjDACQwCqAKISrAwKwAIAisMEA5Sp5Q4AAAAASUVORK5CYII=") repeat;
-                z-index: 1;
+                z-index: -1;
                 min-height: 100%;
                 min-width: 100%;
                 position: absolute;
                 left: 0;
                 top: 0;
-                z-index: -1;
                 opacity: 0.05;
             }
 
