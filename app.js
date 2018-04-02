@@ -10,6 +10,11 @@ if(process.env.NODE_ENV !== 'production'){
   require('dotenv').config();
 }
 var cloudinary = require('cloudinary');
+var session = require('express-session');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
+var User = require('./models/user');
 
 var index = require('./routes/index');
 var shows = require('./routes/shows');
@@ -24,26 +29,41 @@ db.once('open', function(){
   console.log('connected to database anime-app...');
 });
 
-app.use(methodOverride('_method'));
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-
+// cloudinary config 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+// uncomment after placing your favicon in /public
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(methodOverride('_method'));
+
+// passport setup
+var sessionData = {
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+}
+if(process.env.NODE_ENV === 'production'){
+  sessionData.secure = true;
+}
+app.use(session(sessionData));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use('/', index);
 app.use('/shows', shows);
