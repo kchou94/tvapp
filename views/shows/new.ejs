@@ -39,7 +39,9 @@
             </div> <!--/container-->
         </main>
         <script>
-            $('.ui.dropdown').dropdown();
+            $('.ui.dropdown').dropdown({
+                action: 'hide'
+            });
             $('.ui.search.dropdown').dropdown({
                 allowAdditions: true
             });

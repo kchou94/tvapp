@@ -179,6 +179,10 @@
                 height: 100%;
                 object-fit: contain;
             }
+
+            #flashes{
+                margin-top: 50px;
+            }
         </style>
     </head>
     <body>
@@ -196,10 +200,20 @@
                     <div class="right menu">
                         <div class="ui dropdown item">
                             <i class="user circle icon"></i>
-                            <div class="text"> User</div>
+                            <div class="text">
+                                <% if(userCurrent){ %>
+                                <%= userCurrent.displayName %>
+                                <% } else { %>
+                                User
+                                <% } %>
+                            </div>
                             <div class="menu">
-                                <a href="#" class="item">Login</a>
-                                <a href="#" class="item">Sign Up</a>
+                                <% if(userCurrent){ %>
+                                <a href="/logout" class="item">Logout</a>
+                                <% } else {%>
+                                <a href="/login" class="item">Login</a>
+                                <a href="/register" class="item">Sign Up</a>
+                                <% } %>
                             </div>
                         </div>
                     </div>
@@ -207,3 +221,19 @@
             </nav>
         </header>
         <main>
+            <% if(errorMessage.length || successMessage.length){ %>
+            <section id="flashes" class="ui top attached segment">
+                <% if(errorMessage.length){ %>
+                <div class="ui error message">
+                    <p><%= errorMessage %></p>
+                </div>
+                <% } %>
+                <% if(successMessage.length){ %>
+                <div class="ui success message">
+                    <p><%= successMessage %></p>
+                </div>                    
+                <% } %>   
+            </section>
+            <% } %>
+                     
+            

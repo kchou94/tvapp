@@ -13,6 +13,7 @@ var cloudinary = require('cloudinary');
 var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var flash = require('connect-flash');
 
 var User = require('./models/user');
 
@@ -49,7 +50,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
 
-// passport setup
+// session
 var sessionData = {
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -59,11 +60,23 @@ if(process.env.NODE_ENV === 'production'){
   sessionData.secure = true;
 }
 app.use(session(sessionData));
+
+app.use(flash());
+
+// passport setup
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+//locals
+app.use(function(req, res, next){
+  res.locals.userCurrent = req.user;
+  res.locals.errorMessage = req.flash('error');
+  res.locals.successMessage = req.flash('success');
+  next();
+});
 
 app.use('/', index);
 app.use('/shows', shows);

@@ -145,7 +145,9 @@
             </div> <!-- /modal -->
         </main>
         <script>
-        $('.ui.dropdown').dropdown();
+        $('.ui.dropdown').dropdown({
+            action: 'hide'
+        });
         $('.video-modal-open').click(function(){
             var modalSrc = $(this).attr('data-url');
             var modalDesc = $(this).attr('data-desc');

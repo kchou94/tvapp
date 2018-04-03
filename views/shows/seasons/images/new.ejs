@@ -36,7 +36,9 @@
             </div> <!--/container-->
         </main>
         <script>
-            $('.ui.dropdown').dropdown();
+            $('.ui.dropdown').dropdown({
+                action: 'hide'
+            });
             $('.ui.radio.checkbox').checkbox();
         </script>
     <%- include('../../../partials/footer') %>

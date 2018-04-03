@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var passportLocalMongoose = require('passport-local-mongoose');
 
 var userSchema = new mongoose.Schema({
+    displayName: String,
     avatar: {
         publicId: String,
         url: String,
@@ -18,7 +19,9 @@ var userSchema = new mongoose.Schema({
     }
 });
 
-userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(passportLocalMongoose, {
+    usernameLowerCase: true
+});
 
 var User = mongoose.model('User', userSchema);
 

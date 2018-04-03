@@ -1,0 +1,44 @@
+<!-- Register! -->
+        <%- include('partials/header') %>
+            <div class="ui center aligned inverted vertical very padded segment masthead">
+                <h1 class="ui inverted header">Sign Up</h1>
+            </div>
+            <div class="ui vertical very padded segment container">
+                <form class="ui form" action="/register" method="POST">
+                    <h2 class="ui dividing header">User Information</h2>
+                        <div class="field">
+                            <label for="input-username">Username</label>
+                            <input id="input-username" type="text" name="username" required>
+                        </div>
+                        <div class="field">
+                            <label for="input-password">Password</label>
+                            <input id="input-password" type="password" name="password" required>
+                        </div>
+                        <div class="field">
+                            <label for="input-password-confirm">Confirm Password</label>
+                            <input id="input-password-confirm" type="password" name="password-confirm" required>
+                        </div>
+                        <div class="field">
+                            <label for="input-email">Email</label>
+                            <input id="input-email" type="email" name="email" required>
+                        </div>
+                        <input class="ui primary large fluid button" type="submit">
+                </form>
+            </div> <!--/container-->
+        </main>
+        <script>
+            $('.ui.dropdown').dropdown({
+                action: 'hide'
+            });
+            $('.ui.form').form({
+                fields:{
+                    passwordConfirm:{
+                        identifier: 'password-confirm',
+                        rules: [{
+                            type: 'match[password]',
+                        }]
+                    }
+                }
+            });
+        </script>
+    <%- include('partials/footer') %>
