@@ -21,7 +21,6 @@ var storage = cloudinaryStorage({
   folder: process.env.CLOUDINARY_FOLDER,
   filename: function(req, file, cb){
     crypto.randomBytes(16, function(err, buf){
-      if (err) return console.log(err);
       cb(null, buf.toString('hex') + Date.now());
     })
   }
@@ -45,7 +44,10 @@ Show Routes
 /* INDEX */
 router.get('/', function(req, res) {
   Show.find({}, function(err, showsFound){
-    if(err) return res.redirect('back');
+    if(err){
+      req.flash('error', err.message);
+      return res.redirect('back');
+    }
     res.render('shows/index', {page: 'Shows', shows: showsFound});
   })
 });
@@ -73,7 +75,7 @@ router.post('/', upload.single('show[image]'), function(req, res){
 
   Show.create(showData, function(err, showCreated){
     if(err){
-      // console.log(err);
+      req.flash('error', err.message);
       return res.redirect('back');
     } 
     res.redirect('/shows');
@@ -102,7 +104,10 @@ router.post('/', upload.single('show[image]'), function(req, res){
 /* SHOW */
 router.get('/:id', function(req, res) {
   Show.findById(req.params.id, function(err, showFound){
-    if(err) return res.redirect('back');
+    if(err){
+      req.flash('error', err.message);
+      return res.redirect('back');
+    }
     res.render('shows/show', {show: showFound, page: showFound.title});
   });
 });
@@ -111,7 +116,7 @@ router.get('/:id', function(req, res) {
 router.get('/:id/edit', function(req, res){
   Show.findById(req.params.id, function(err, showFound){
     if(err){
-      // console.log(err);
+      req.flash('error', err.message);
       return res.redirect('back');
     }
     // console.log(showFound);
@@ -142,7 +147,7 @@ router.put('/:id', upload.single('show[image]'), function(req, res){
   }
   Show.findByIdAndUpdate(req.params.id, showData, function(err, showUpdated){
     if(err){
-      // console.log(err);
+      req.flash('error', err.message);
       return res.redirect('back');
     }
     var imgToDeleteURL = showUpdated.image;
@@ -164,7 +169,7 @@ router.put('/:id', upload.single('show[image]'), function(req, res){
 router.delete('/:id', function(req, res){
   Show.findByIdAndRemove(req.params.id, function(err, showRemoved){
     if(err){
-      // console.log(err);
+      req.flash('error', err.message);
       return res.redirect('back');
     }
     var imgToDeleteURL = showRemoved.image;
@@ -200,7 +205,10 @@ router.post('/:id/seasons', function(req, res){
   var seasonData = req.body.season;
   // console.log(seasonData);
   Show.findById(id, function(err, showFound){
-    if(err) return res.redirect('back');
+    if(err){
+      req.flash('error', err.message);
+      return res.redirect('back');
+    } 
     showFound.seasons.push(seasonData);
     // console.log(showFound);
     showFound.save(function(err){
@@ -216,7 +224,10 @@ router.get('/:showId/seasons/:seasonId/edit', function(req, res){
   var seasonId = req.params.seasonId;
   // console.log(seasonId);
   Show.findById(showId, function(err, showFound){
-    if(err) return res.redirect('back');
+    if(err){
+      req.flash('error', err.message);
+      return res.redirect('back');
+    }
     var season = showFound.seasons.id(seasonId);
     // console.log(season);
     res.render('shows/seasons/edit', {show: showFound, season: season, page: showFound.title + ' | Edit Season: ' + season.name});
@@ -230,7 +241,7 @@ router.put('/:showId/seasons/:seasonId', function(req, res){
   var seasonData = req.body.season;
   Show.findOneAndUpdate({'_id': showId, 'seasons._id': seasonId}, {'$set': {'seasons.$': seasonData}}, function(err, showUpdated){
     if(err){
-      // console.log(err); 
+      req.flash('error', err.message); 
       return res.redirect('back');
     }
     // console.log(showUpdated);
@@ -244,7 +255,7 @@ router.delete('/:showId/seasons/:seasonId', function(req, res){
   var seasonId = req.params.seasonId;
   Show.findByIdAndUpdate(showId, {$pull: {seasons: {'_id': seasonId}}}, function(err, affected){
     if(err){
-      // console.log(err); 
+      req.flash('error', err.message);
       return res.redirect('back');
     }
     // console.log(affected);
@@ -262,7 +273,7 @@ router.get('/:showId/seasons/:seasonId/videos/new', function(req, res){
   var seasonId = req.params.seasonId;
   Show.findById(showId, function(err, showFound){
     if(err){
-      // console.log(err);
+      req.flash('error', err.message);
       res.redirect('back');
     }
     var season = showFound.seasons.id(seasonId);
@@ -279,14 +290,14 @@ router.post('/:showId/seasons/:seasonId/videos', function(req, res){
   videoData.thumbnail = videoData.url.replace(/^(.*?)streamable\.com\/o\//, 'https://images.streamable.com/east/image/') + '.jpg?height=200';
   Show.findById(showId, function(err, showFound){
     if(err){
-      // console.log(err);
+      req.flash('error', err.message);
       return res.redirect('back');
     }
     var season = showFound.seasons.id(seasonId);
     season.videos.push(videoData);
     showFound.save(function(err){
       if(err){
-        // console.log(err);
+        req.flash('error', err.message);
         res.redirect('back');
       }
       // console.log(season);
@@ -302,7 +313,7 @@ router.get('/:showId/seasons/:seasonId/videos/:videoId/edit', function(req, res)
   var videoId = req.params.videoId;
   Show.findById(showId, function(err, showFound){
     if(err){
-      // console.log(err);
+      req.flash('error', err.message);
       res.redirect('back');
     }
     var season = showFound.seasons.id(seasonId);
@@ -323,7 +334,7 @@ router.put('/:showId/seasons/:seasonId/videos/:videoId', function(req, res){
   // console.log(videoData);
   Show.findById(showId, function(err, showFound){
     if(err){
-      // console.log('oops: ' + err);
+      req.flash('error', err.message);
       res.redirect('back');
     }
     var season = showFound.seasons.id(seasonId);
@@ -337,7 +348,7 @@ router.put('/:showId/seasons/:seasonId/videos/:videoId', function(req, res){
     video.set(videoData);
     showFound.save(function(err){
       if(err){
-        // console.log('error: ' + err);
+        req.flash('error', err.message);
         res.redirect('back');
       }
       res.redirect('/shows/' + showId);
@@ -352,7 +363,7 @@ router.delete('/:showId/seasons/:seasonId/videos/:videoId', function(req, res){
   var videoId = req.params.videoId;
   Show.findById(showId, function(err, showFound){
     if(err){
-      // console.log('showfind err: ' + err);
+      req.flash('error', err.message);
       res.redirect('back');
     }
     var season = showFound.seasons.id(seasonId);
@@ -392,7 +403,7 @@ router.get('/:showId/seasons/:seasonId/images/new', function(req, res){
   var seasonId = req.params.seasonId;
   Show.findById(showId, function(err, showFound){
     if(err){
-      // console.log(err);
+      req.flash('error', err.message);
       res.redirect('back');
     }
     var season = showFound.seasons.id(seasonId);
@@ -411,14 +422,14 @@ router.post('/:showId/seasons/:seasonId/images', upload.single('img[upload]'), f
   // console.log(imgData);
   Show.findById(showId, function(err, showFound){
     if(err){
-      // console.log(err);
+      req.flash('error', err.message);
       return res.redirect('back');
     }
     var season = showFound.seasons.id(seasonId);
     season.images.push(imgData);
     showFound.save(function(err){
       if(err){
-        // console.log(err);
+        req.flash('error', err.message);
         return res.redirect('back');
       }
       return res.redirect('/shows/' + showId);
@@ -433,7 +444,7 @@ router.get('/:showId/seasons/:seasonId/images/:imageId/edit', function(req, res)
   var imageId = req.params.imageId;
   Show.findById(showId, function(err, showFound){
     if(err){
-      // console.log(err);
+      req.flash('error', err.message);
       res.redirect('back');
     }
     var season = showFound.seasons.id(seasonId);
@@ -457,7 +468,7 @@ router.put('/:showId/seasons/:seasonId/images/:imageId', upload.single('img[uplo
   // console.log(imgData);
   Show.findById(showId, function(err, showFound){
     if(err){
-      // console.log(err);
+      req.flash('error', err.message);
       res.redirect('back');
     }
     var season = showFound.seasons.id(seasonId);
@@ -466,7 +477,7 @@ router.put('/:showId/seasons/:seasonId/images/:imageId', upload.single('img[uplo
     image.set(imgData);
     showFound.save(function(err){
       if(err){
-        // console.log('error: ' + err);
+        req.flash('error', err.message);
         return res.redirect('back');
       }
       var regex = new RegExp('^(.*?)res\\.cloudinary\\.com\\/' + process.env.CLOUDINARY_NAME + '\/(.*?)\/(' + process.env.CLOUDINARY_FOLDER + '\/(.*?))\\.(.*)');
@@ -490,7 +501,7 @@ router.delete('/:showId/seasons/:seasonId/images/:imageId', function(req, res){
   var imgId = req.params.imageId;
   Show.findById(showId, function(err, showFound){
     if(err){
-      // console.log(err);
+      req.flash('error', err.message);
       res.redirect('back');
     }
     var season = showFound.seasons.id(seasonId);
@@ -518,7 +529,10 @@ router.delete('/:showId/seasons/:seasonId/images/:imageId', function(req, res){
       imgArr.splice(imgIndex, 1);
       // console.log('deleted');      
       showFound.save(function(err){
-        // console.log('saved');
+        if(err){
+          req.flash('error', err.message);
+          return res.redirect('back');
+        }
         res.redirect('/shows/' + showId);
       });
     } else {

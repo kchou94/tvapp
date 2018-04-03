@@ -31,13 +31,13 @@ router.post('/register', function(req, res){
   }
   User.register(userData, req.body.password, function(err, userNew){
     if(err){
-      // console.log(err);
+      req.flash('error', err.message);
       return res.redirect('/register');
     }
     // console.log('ok');
     req.login(userNew, function(err){
       if(err){ 
-        // console.log(err);
+        req.flash('error', err.message);
         return res.redirect('back');
       }
       res.redirect('/shows');
