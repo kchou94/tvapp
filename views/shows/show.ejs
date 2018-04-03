@@ -12,7 +12,7 @@
                     <div class="six wide column">
                         <div class="ui raised segments">
                             <div class="ui segment">
-                                <img class="ui medium centered image" src="<%= show.thumbnail %>">
+                                <img class="ui centered image" src="<%= show.thumbnail %>">
                                 <h2 class="ui medium header"><%= show.title %>
                                     <p class="sub header"><%= show.foreignTitle %></p>
                                 </h2>
@@ -43,9 +43,11 @@
                             <% show.seasons.forEach(function(season){ %>
                             <div class="ui segment">
                                 <h3>
+                                    <% if(userCurrent){ %>
                                     <a href="/shows/<%= show._id %>/seasons/<%= season._id %>/edit" id="edit-button" class="circular compact left floated ui small basic icon button">
                                         <i class="edit icon"></i>
                                     </a>
+                                    <% } %>
                                     <span class="ui header"><%= season.name %></span>
                                 </h3>
                                 <div class="ui basic segment">
@@ -65,9 +67,11 @@
                                             <div class="content">
                                                 <div class="description"><%= video.description %></div>
                                             </div>
+                                            <% if(userCurrent){ %>
                                             <a class="ui bottom attached button" href="/shows/<%= show._id %>/seasons/<%= season._id %>/videos/<%= video._id %>/edit">
                                                 <i class="edit icon"></i>
                                             </a>
+                                            <% } %>
                                         </div>
                                         <% }) %>
                                     </div>
@@ -98,9 +102,11 @@
                                             <div class="content">
                                                 <div class="description"><%= image.description %></div>
                                             </div>
+                                            <% if(userCurrent){ %>
                                             <a class="ui bottom attached button" href="/shows/<%= show._id %>/seasons/<%= season._id %>/images/<%= image._id %>/edit">
                                                 <i class="edit icon"></i>
                                             </a>
+                                            <% } %>
                                         </div>
                                         <% }) %>
                                     </div>

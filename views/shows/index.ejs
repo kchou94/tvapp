@@ -9,9 +9,11 @@
                 <div id="showcase" class="ui centered cards">
                     <% shows.forEach(function(show){ %>
                     <div class="ui raised link card">
+                        <% if(userCurrent){ %>
                         <a href="/shows/<%= show._id %>/edit" class="ui right corner label">
                             <i class="edit icon"></i>
                         </a>
+                        <% } %>
                         <a href="/shows/<%= show._id %>" class="image">                 
                             <img src="<%= show.thumbnail %>" alt="<%= show.title %> poster art">
                         </a>

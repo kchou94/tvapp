@@ -44,15 +44,32 @@
                         <input class="ui primary large fluid button" type="submit" >
                 </form>
                 <form id="delete-form" class="ui form" action="/shows/<%= show._id %>/seasons/<%= season._id %>/images/<%= image._id %>?_method=DELETE" method="POST">
-                    <input class="ui large basic fluid negative button" type="submit" value="Delete">
+                    <button id="delete-button" class="ui large basic fluid negative button" type="button">Delete</button>
                 </form>
             </div> <!--/container-->
+            <div class="ui mini modal">
+                <div class="header">Confirm Deletion</div>
+                <div class="content">
+                    <p>Are you sure you want to delete this?</p>
+                </div>
+                <div class="actions">
+                    <div class="ui approve negative button">Delete</div>
+                    <div class="ui cancel button">Cancel</div>
+                </div>
+            </div>
         </main>
         <script>
             $('.ui.dropdown').dropdown({
                 action: 'hide'
             });
-            $('.ui.radio.checkbox').checkbox()
-;
+            $('.ui.radio.checkbox').checkbox();
+            $('.ui.modal').modal({
+                onApprove: function(){
+                    $('#delete-form').submit();
+                }
+            });
+            $('#delete-button').click(function(){
+                $('.ui.modal').modal('show');
+            });     
         </script>
     <%- include('../../../partials/footer') %>
