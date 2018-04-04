@@ -3,8 +3,9 @@
    Model!
 =========*/
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
-var showSchema = new mongoose.Schema({
+var showSchema = new Schema({
     title: String,
     foreignTitle: String,
     image: String,
@@ -18,18 +19,34 @@ var showSchema = new mongoose.Schema({
             description: String,
             url: String,
             thumbnail: String,
-            spoiler: Boolean
+            spoiler: Boolean,
+            author: {
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+            }
         }],
         images: [{
             description: String,
             url: String,
             thumbnail: String,
-            spoiler: Boolean
-        }]
+            spoiler: Boolean,
+            author: {
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        }],
+        author:{
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
     }],
+    author:{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     schemaVersion: {
-        type: Number,
-        default: 0.1
+        type: String,
+        default: '0.2.0'
     }
 });
 

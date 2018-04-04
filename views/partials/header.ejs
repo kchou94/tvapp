@@ -199,7 +199,7 @@
                     <a href="/shows" class="item <%= typeof page != 'undefined' && page === 'shows' ? 'active' : '' %>">Shows</a>
                     <div class="right menu">
                         <div class="ui dropdown item">
-                            <i class="user circle icon"></i>
+                            <i class="user <%= userCurrent && userCurrent.isAdmin ? 'red' : ''%> circle icon"></i>
                             <div class="text">
                                 <% if(userCurrent){ %>
                                 <%= userCurrent.displayName %>

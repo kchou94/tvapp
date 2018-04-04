@@ -48,6 +48,7 @@ router.get('/', function(req, res) {
       req.flash('error', err.message);
       return res.redirect('back');
     }
+    // console.log(showsFound);
     res.render('shows/index', {page: 'Shows', shows: showsFound});
   })
 });
@@ -62,6 +63,7 @@ router.get('/new', isLoggedIn, function(req, res){
 router.post('/', isLoggedIn, upload.single('show[image]'), function(req, res){
   var showData = req.body.show;
   var tagStr = showData.tags;
+  showData.author = req.user._id;
   if(tagStr === ''){
     showData.tags = [];
   } else {
@@ -72,7 +74,6 @@ router.post('/', isLoggedIn, upload.single('show[image]'), function(req, res){
     showData.image = imgAPI.secure_url;
     showData.thumbnail = cloudinary.url(imgAPI.public_id + '.' + imgAPI.format, {secure: true, height: 400});
   }
-
   Show.create(showData, function(err, showCreated){
     if(err){
       req.flash('error', err.message);
@@ -103,7 +104,7 @@ router.post('/', isLoggedIn, upload.single('show[image]'), function(req, res){
 
 /* SHOW */
 router.get('/:id', function(req, res) {
-  Show.findById(req.params.id, function(err, showFound){
+  Show.findById(req.params.id).populate('author').exec(function(err, showFound){
     if(err){
       req.flash('error', err.message);
       return res.redirect('back');
@@ -201,10 +202,11 @@ router.get('/:id/seasons/new', isLoggedIn, function(req, res){
 
 /* CREATE */
 router.post('/:id/seasons', isLoggedIn, function(req, res){
-  var id = req.params.id;
+  var showId = req.params.id;
   var seasonData = req.body.season;
+  seasonData.author = req.user._id;
   // console.log(seasonData);
-  Show.findById(id, function(err, showFound){
+  Show.findById(showId, function(err, showFound){
     if(err){
       req.flash('error', err.message);
       return res.redirect('back');
@@ -212,8 +214,11 @@ router.post('/:id/seasons', isLoggedIn, function(req, res){
     showFound.seasons.push(seasonData);
     // console.log(showFound);
     showFound.save(function(err){
-      if(err) return res.redirect('back');
-      res.redirect('/shows/' + showFound.id);
+      if(err){
+        req.flash('error', err.message);
+        return res.redirect('back');
+      }
+      res.redirect('/shows/' + showId);
     });
   });
 });
@@ -286,6 +291,7 @@ router.post('/:showId/seasons/:seasonId/videos', isLoggedIn, function(req, res){
   var showId = req.params.showId;
   var seasonId = req.params.seasonId;
   var videoData = req.body.video;
+  videoData.author = req.user._id;
   videoData.url = videoData.url.replace(/^(.*?)streamable\.com[/\\]/, 'https://www.streamable.com/o/');
   videoData.thumbnail = videoData.url.replace(/^(.*?)streamable\.com\/o\//, 'https://images.streamable.com/east/image/') + '.jpg?height=200';
   Show.findById(showId, function(err, showFound){
@@ -416,6 +422,7 @@ router.post('/:showId/seasons/:seasonId/images', isLoggedIn, upload.single('img[
   var showId = req.params.showId;
   var seasonId = req.params.seasonId;
   var imgData = req.body.img;
+  imgData.author = req.user._id;
   var imgAPI = req.file;
   imgData.url = imgAPI.secure_url;
   imgData.thumbnail = cloudinary.url(imgAPI.public_id + '.' + imgAPI.format, {secure: true, height: 200});

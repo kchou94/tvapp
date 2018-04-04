@@ -9,7 +9,7 @@
                 <div id="showcase" class="ui centered cards">
                     <% shows.forEach(function(show){ %>
                     <div class="ui raised link card">
-                        <% if(userCurrent){ %>
+                        <% if(userCurrent && ((show.author && show.author == userCurrent.id) || userCurrent.isAdmin)){ %>
                         <a href="/shows/<%= show._id %>/edit" class="ui right corner label">
                             <i class="edit icon"></i>
                         </a>
