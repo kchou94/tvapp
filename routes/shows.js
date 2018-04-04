@@ -292,7 +292,7 @@ router.post('/:showId/seasons/:seasonId/videos', isLoggedIn, function(req, res){
   var seasonId = req.params.seasonId;
   var videoData = req.body.video;
   videoData.author = req.user._id;
-  videoData.url = videoData.url.replace(/^(.*?)streamable\.com[/\\]/, 'https://www.streamable.com/o/');
+  videoData.url = videoData.url.replace(/^(.*?)streamable\.com\//, 'https://www.streamable.com/o/');
   videoData.thumbnail = videoData.url.replace(/^(.*?)streamable\.com\/o\//, 'https://images.streamable.com/east/image/') + '.jpg?height=200';
   Show.findById(showId, function(err, showFound){
     if(err){
@@ -336,7 +336,7 @@ router.put('/:showId/seasons/:seasonId/videos/:videoId', isLoggedIn, isVideoAuth
   var videoId = req.params.videoId;
   var videoData = req.body.video;
   var urlVideo = videoData.url;
-  var regexVideo = /^(.*?)streamable\.com\/o\//
+  var regexVideo = /https\:\/\/www\.streamable\.com\/o\/[a-zA-Z0-9]*/
   // console.log(videoData);
   Show.findById(showId, function(err, showFound){
     if(err){
@@ -347,7 +347,7 @@ router.put('/:showId/seasons/:seasonId/videos/:videoId', isLoggedIn, isVideoAuth
     var video = season.videos.id(videoId);
     // console.log(urlVideo);
     if(!regexVideo.test(urlVideo)){
-      urlVideo = urlVideo.replace(/^(.*?)streamable\.com[/\\]/, 'https://www.streamable.com/o/');
+      urlVideo = urlVideo.replace(/^(.*?)streamable\.com[\/](o\/)?/, 'https://www.streamable.com/o/');
       videoData.url = urlVideo;
       videoData.thumbnail = urlVideo.replace(/^(.*?)streamable\.com\/o\//, 'https://images.streamable.com/east/image/') + '.jpg?height=200';
     }
