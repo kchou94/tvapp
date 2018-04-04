@@ -103,8 +103,8 @@ router.post('/', isLoggedIn, upload.single('show[image]'), function(req, res){
 // });
 
 /* SHOW */
-router.get('/:id', function(req, res) {
-  Show.findById(req.params.id).populate('author').exec(function(err, showFound){
+router.get('/:showId', function(req, res) {
+  Show.findById(req.params.showId).populate('author').exec(function(err, showFound){
     if(err){
       req.flash('error', err.message);
       return res.redirect('back');
@@ -114,8 +114,8 @@ router.get('/:id', function(req, res) {
 });
 
 /* EDIT */
-router.get('/:id/edit', isLoggedIn, function(req, res){
-  Show.findById(req.params.id, function(err, showFound){
+router.get('/:showId/edit', isLoggedIn, isShowAuthor, function(req, res){
+  Show.findById(req.params.showId, function(err, showFound){
     if(err){
       req.flash('error', err.message);
       return res.redirect('back');
@@ -127,7 +127,8 @@ router.get('/:id/edit', isLoggedIn, function(req, res){
 
 /* UPDATE */
 
-router.put('/:id', isLoggedIn, upload.single('show[image]'), function(req, res){
+router.put('/:showId', isLoggedIn, isShowAuthor, upload.single('show[image]'), function(req, res){
+  var showId = req.params.showId;
   var showData = req.body.show;
   var tagStr = showData.tags;
   // console.log('desc: ' + showData.description);
@@ -146,7 +147,7 @@ router.put('/:id', isLoggedIn, upload.single('show[image]'), function(req, res){
     // newPath = req.file.path.substring(req.file.path.indexOf('public\\') + 7);
     // showData.image = newPath;
   }
-  Show.findByIdAndUpdate(req.params.id, showData, function(err, showUpdated){
+  Show.findByIdAndUpdate(showId, showData, function(err, showUpdated){
     if(err){
       req.flash('error', err.message);
       return res.redirect('back');
@@ -162,13 +163,13 @@ router.put('/:id', isLoggedIn, upload.single('show[image]'), function(req, res){
       // console.log(result);
     });
     // console.log(showUpdated);
-    res.redirect('/shows/' + showUpdated._id);
+    res.redirect('/shows/' + showId);
   });
 });
 
 /* DESTROY */
-router.delete('/:id', isLoggedIn, function(req, res){
-  Show.findByIdAndRemove(req.params.id, function(err, showRemoved){
+router.delete('/:showId', isLoggedIn, isShowAuthor, function(req, res){
+  Show.findByIdAndRemove(req.params.showId, function(err, showRemoved){
     if(err){
       req.flash('error', err.message);
       return res.redirect('back');
@@ -192,17 +193,16 @@ Season Routes
 ============*/
 
 /* NEW */
-router.get('/:id/seasons/new', isLoggedIn, function(req, res){
-  var id = req.params.id;
-  Show.findById(id, function(err, showFound){
+router.get('/:showId/seasons/new', isLoggedIn, function(req, res){
+  Show.findById(req.params.showId, function(err, showFound){
     if(err) return res.redirect('back');
     res.render('shows/seasons/new', {show: showFound, page: showFound.title + ' | Add Season'});
   });
 });
 
 /* CREATE */
-router.post('/:id/seasons', isLoggedIn, function(req, res){
-  var showId = req.params.id;
+router.post('/:showId/seasons', isLoggedIn, function(req, res){
+  var showId = req.params.showId;
   var seasonData = req.body.season;
   seasonData.author = req.user._id;
   // console.log(seasonData);
@@ -224,7 +224,7 @@ router.post('/:id/seasons', isLoggedIn, function(req, res){
 });
 
 /* EDIT */
-router.get('/:showId/seasons/:seasonId/edit', isLoggedIn, function(req, res){
+router.get('/:showId/seasons/:seasonId/edit', isSeasonAuthor, isLoggedIn, function(req, res){
   var showId = req.params.showId;
   var seasonId = req.params.seasonId;
   // console.log(seasonId);
@@ -240,7 +240,7 @@ router.get('/:showId/seasons/:seasonId/edit', isLoggedIn, function(req, res){
 });
 
 /* UPDATE */
-router.put('/:showId/seasons/:seasonId', isLoggedIn, function(req, res){
+router.put('/:showId/seasons/:seasonId', isSeasonAuthor, isLoggedIn, function(req, res){
   var showId = req.params.showId;
   var seasonId = req.params.seasonId;
   var seasonData = req.body.season;
@@ -255,15 +255,15 @@ router.put('/:showId/seasons/:seasonId', isLoggedIn, function(req, res){
 });
 
 /* DESTROY */
-router.delete('/:showId/seasons/:seasonId', isLoggedIn, function(req, res){
+router.delete('/:showId/seasons/:seasonId', isSeasonAuthor, isLoggedIn, function(req, res){
   var showId = req.params.showId;
   var seasonId = req.params.seasonId;
-  Show.findByIdAndUpdate(showId, {$pull: {seasons: {'_id': seasonId}}}, function(err, affected){
+  Show.findByIdAndUpdate(showId, {$pull: {seasons: {'_id': seasonId}}}, function(err, showUpdated){
     if(err){
       req.flash('error', err.message);
       return res.redirect('back');
     }
-    // console.log(affected);
+    // console.log(showUpdated.seasons.id(seasonId).images);
     res.redirect('/shows/' + showId);
   });
 });
@@ -313,7 +313,7 @@ router.post('/:showId/seasons/:seasonId/videos', isLoggedIn, function(req, res){
 });
 
 /* EDIT */
-router.get('/:showId/seasons/:seasonId/videos/:videoId/edit', isLoggedIn, function(req, res){
+router.get('/:showId/seasons/:seasonId/videos/:videoId/edit', isLoggedIn, isVideoAuthor, function(req, res){
   var showId = req.params.showId;
   var seasonId = req.params.seasonId;
   var videoId = req.params.videoId;
@@ -330,7 +330,7 @@ router.get('/:showId/seasons/:seasonId/videos/:videoId/edit', isLoggedIn, functi
 });
 
 /* UPDATE */
-router.put('/:showId/seasons/:seasonId/videos/:videoId', isLoggedIn, function(req, res){
+router.put('/:showId/seasons/:seasonId/videos/:videoId', isLoggedIn, isVideoAuthor, function(req, res){
   var showId = req.params.showId;
   var seasonId = req.params.seasonId;
   var videoId = req.params.videoId;
@@ -363,7 +363,7 @@ router.put('/:showId/seasons/:seasonId/videos/:videoId', isLoggedIn, function(re
 });
 
 /* DESTROY */
-router.delete('/:showId/seasons/:seasonId/videos/:videoId', isLoggedIn, function(req, res){
+router.delete('/:showId/seasons/:seasonId/videos/:videoId', isLoggedIn, isVideoAuthor, function(req, res){
   var showId = req.params.showId;
   var seasonId = req.params.seasonId;
   var videoId = req.params.videoId;
@@ -445,7 +445,7 @@ router.post('/:showId/seasons/:seasonId/images', isLoggedIn, upload.single('img[
 });
 
 /* EDIT */
-router.get('/:showId/seasons/:seasonId/images/:imageId/edit', isLoggedIn, function(req, res){
+router.get('/:showId/seasons/:seasonId/images/:imageId/edit', isLoggedIn, isImageAuthor, function(req, res){
   var showId = req.params.showId;
   var seasonId = req.params.seasonId;
   var imageId = req.params.imageId;
@@ -462,7 +462,7 @@ router.get('/:showId/seasons/:seasonId/images/:imageId/edit', isLoggedIn, functi
 });
 
 /* UPDATE */
-router.put('/:showId/seasons/:seasonId/images/:imageId', isLoggedIn, upload.single('img[upload]'), function(req, res){
+router.put('/:showId/seasons/:seasonId/images/:imageId', isLoggedIn, isImageAuthor, upload.single('img[upload]'), function(req, res){
   var showId = req.params.showId;
   var seasonId = req.params.seasonId;
   var imageId = req.params.imageId;
@@ -502,7 +502,7 @@ router.put('/:showId/seasons/:seasonId/images/:imageId', isLoggedIn, upload.sing
 });
 
 /* DESTROY */
-router.delete('/:showId/seasons/:seasonId/images/:imageId', isLoggedIn, function(req, res){
+router.delete('/:showId/seasons/:seasonId/images/:imageId', isLoggedIn, isImageAuthor, function(req, res){
   var showId = req.params.showId;
   var seasonId = req.params.seasonId;
   var imgId = req.params.imageId;
@@ -550,12 +550,85 @@ router.delete('/:showId/seasons/:seasonId/images/:imageId', isLoggedIn, function
 });
 
 function isLoggedIn(req, res, next){
-  if(req.user){
+  if(req.isAuthenticated()){
     next();
   } else {
     req.flash('error', 'You must be logged in to do that!');
     res.redirect('/login');
   }
+}
+
+function isShowAuthor(req, res, next){
+  Show.findById(req.params.showId, function(err, showFound){
+    if(err){
+      req.flash('error', err.message);
+      return res.redirect('back');
+    }
+    if(req.user.id == showFound.author || req.user.isAdmin){
+      next();
+    } else {
+      req.flash('error', 'You do not have permission!');
+      res.redirect('back');
+    }
+  })
+}
+
+function isSeasonAuthor(req, res, next){
+  var showId = req.params.showId;
+  var seasonId = req.params.seasonId;
+  Show.findById(showId, function(err, showFound){
+    if(err){
+      req.flash('error', err.message);
+      return res.redirect('back');
+    }
+    var season = showFound.seasons.id(seasonId);
+    if(req.user.id == season.author || req.user.isAdmin){
+      next();
+    } else {
+      req.flash('error', 'You do not have permission!');
+      res.redirect('back');
+    }
+  })
+}
+
+function isVideoAuthor(req, res, next){
+  var showId = req.params.showId;
+  var seasonId = req.params.seasonId;
+  var videoId = req.params.videoId;
+  Show.findById(showId, function(err, showFound){
+    if(err){
+      req.flash('error', err.message);
+      return res.redirect('back');
+    }
+    var season = showFound.seasons.id(seasonId);
+    var video = season.videos.id(videoId);
+    if(req.user.id == video.author || req.user.isAdmin){
+      next();
+    } else {
+      req.flash('error', 'You do not have permission!');
+      res.redirect('back');
+    }
+  })
+}
+
+function isImageAuthor(req, res, next){
+  var showId = req.params.showId;
+  var seasonId = req.params.seasonId;
+  var imageId = req.params.imageId;
+  Show.findById(showId, function(err, showFound){
+    if(err){
+      req.flash('error', err.message);
+      return res.redirect('back');
+    }
+    var season = showFound.seasons.id(seasonId);
+    var image = season.images.id(imageId);
+    if(req.user.id == image.author || req.user.isAdmin){
+      next();
+    } else {
+      req.flash('error', 'You do not have permission!');
+      res.redirect('back');
+    }
+  })
 }
 
 module.exports = router;
