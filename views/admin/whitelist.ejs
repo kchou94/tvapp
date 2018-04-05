@@ -1,0 +1,52 @@
+<!-- Admin! Whitelist -->
+        <%- include('../partials/header') %>
+            <div class="ui center aligned inverted vertical very padded segment masthead">
+                <h1 class="ui inverted header">Admin
+                    <div class="sub header">Whitelist</div>
+                </h1>
+            </div>
+            <div class="ui vertical very padded segments container">
+                <div class="ui segment">
+                    <h2 class="ui header">Links</h2>
+                    <div class="ui horizontal link list">
+                        <a href="/admin" class="item">Admin Dash</a>
+                        <a href="/admin/whitelist" class="item active">Whitelist</a>
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <h2>Whitelist</h2>
+                    <form class="ui form" action="/admin/whitelist" method="POST">
+                        <h3 class="ui header">Add to Whitelist</h3>
+                        <div class="field">
+                            <div class="ui labeled input">
+                                <label for="input-email" class="ui label">Email</label>
+                                <input id="input-email" type="email" name="email">
+                            </div>
+                        </div>
+                        <input class="ui submit fluid button" type="submit">
+                    </form>
+                    <h3>Existing Whitelist Entries</h3>
+                    <div class="ui list">
+                        <% emails.forEach(function(email){ %>
+                        <div class="item">
+                            <form action="/admin/whitelist/<%= email._id %>?_method=DELETE" method="POST">
+                                <button class="ui tiny icon negative button"><i class="ui delete icon"></i></button>
+                                <%= email.email %>
+                                <% users.forEach(function(user){ %>
+                                <% if(user.isActive && user.email === email.email){ %>
+                                <strong>[<%= user.displayName %>]</strong>
+                                <% } %>
+                                <% }); %>
+                            </form>                            
+                        </div>
+                        <% }); %>
+                    </div>
+                </div>
+            </div> <!--/container-->
+        </main>
+        <script>
+            $('.ui.dropdown').dropdown({
+                action: 'hide'
+            });
+        </script>
+    <%- include('../partials/footer') %>

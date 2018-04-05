@@ -1,0 +1,23 @@
+<!-- Admin! Index -->
+        <%- include('../partials/header') %>
+            <div class="ui center aligned inverted vertical very padded segment masthead">
+                <h1 class="ui inverted header">Admin
+                    <div class="sub header">Dashboard</div>
+                </h1>
+            </div>
+            <div class="ui vertical very padded segments container">
+                <div class="ui segment">
+                    <h2 class="ui header">Links</h2>
+                    <div class="ui horizontal link list">
+                        <a href="/admin" class="item active">Admin Dash</a>
+                        <a href="/admin/whitelist" class="item">Whitelist</a>
+                    </div>
+                </div>
+            </div> <!--/container-->
+        </main>
+        <script>
+            $('.ui.dropdown').dropdown({
+                action: 'hide'
+            });
+        </script>
+    <%- include('../partials/footer') %>

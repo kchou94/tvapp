@@ -25,7 +25,7 @@ var transporter = nodemailer.createTransport({
 
 /* INDEX */
 router.get('/', function(req, res) {
-  res.render('index', {page: 'home'});
+  res.render('index', {page: 'Home'});
 });
 
 /*==========
@@ -113,7 +113,7 @@ router.get('/logout', function(req, res){
 
 /* Activate */
 router.get('/activate', isLoggedIn, isNotActive, function(req, res){
-  res.render('activate/index');
+  res.render('activate/index', {page: 'Activation Required'});
 });
 
 /* Activation Email Send */
@@ -136,7 +136,7 @@ router.get('/activate/send', isLoggedIn, isNotActive, function(req, res){
         req.flash('error', err.message);
         return res.redirect('back');
       }
-      res.render('activate/send');
+      res.render('activate/send', {page: 'Email Sent'});
     });
   });
 });
