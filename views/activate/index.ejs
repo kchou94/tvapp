@@ -1,11 +1,16 @@
 <!-- Activate! -->
-        <%- include('partials/header') %>
+        <%- include('../partials/header') %>
             <div class="ui center aligned inverted vertical very padded segment masthead">
                 <h1 class="ui inverted header">Activate Account</h1>
             </div>
             <div class="ui vertical very padded segment center aligned container">
                 <h2 class="ui header">Please Verify Your Email!</h2>
                 <p>We need to verify your email before you can use your account.  Please check your email in order to verify.</p>
+                <h3>Didn't Receive It?</h3>
+                <p>Please check your spam folder first.</p>
+                <form class="ui form" action="/activate/send">
+                    <button class="ui button primary">Send Another Email</button>
+                </form>
             </div> <!--/container-->
         </main>
         <script>
@@ -13,4 +18,4 @@
                 action: 'hide'
             });
         </script>
-    <%- include('partials/footer') %>
+    <%- include('../partials/footer') %>

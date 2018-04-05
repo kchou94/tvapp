@@ -44,12 +44,12 @@ router.post('/register', function(req, res){
     username: req.body.username,
     email: req.body.email
   }
-  Email.find({'email': userData.email}, function(err, emailFound){
+  Email.findOne({'email': userData.email}, function(err, emailFound){
     if(err){
       req.flash('error', err.message);
       return res.redirect('back');
     }
-    if(emailFound[0]){
+    if(emailFound){
       User.register(userData, req.body.password, function(err, userNew){
         if(err){
           req.flash('error', err.message);
@@ -113,7 +113,32 @@ router.get('/logout', function(req, res){
 
 /* Activate */
 router.get('/activate', isLoggedIn, isNotActive, function(req, res){
-  res.render('activate');
+  res.render('activate/index');
+});
+
+/* Activation Email Send */
+router.get('/activate/send', isLoggedIn, isNotActive, function(req, res){
+  Token.findOne({user: req.user._id}, function(err, tokenFound){
+    if(err){
+      req.flash('error', err.message);
+      return res.redirect('back');
+    }
+    // console.log(tokenFound.tokenStr);
+    var msg = {
+      to: req.user.email,
+      from: 'moemoeclubmailer@gmail.com',
+      subject: 'Moe Moe Club - Welcome!  Please verify your account',
+      text: 'Welcome to Moe Moe Club!  Please verify your account by going to: http://moemoeclub-kchou94.herokuapp.com/activate/' + tokenFound.tokenStr,
+      html: '<h1>Welcome to Moe Moe Club!</h1><p>Please verify your account by clicking the link below</p><a href=\"http://moemoeclub-kchou94.herokuapp.com/activate/' + tokenFound.tokenStr + '\">Verify me kudasai!</a><p>If that doesn\'t work, copy and paste this into your browser address bar: http://moemoeclub-kchou94.herokuapp.com/activate/' + tokenFound.tokenStr + '</p>'
+    };
+    transporter.sendMail(msg, function(err, info){
+      if(err){
+        req.flash('error', err.message);
+        return res.redirect('back');
+      }
+      res.render('activate/send');
+    });
+  });
 });
 
 /* Activate Token */
