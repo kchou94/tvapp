@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var Show = require('./models/show');
+var Show = require('../models/show');
 if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config();
 }

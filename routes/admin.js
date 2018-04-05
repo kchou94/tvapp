@@ -40,17 +40,16 @@ router.post('/whitelist', isLoggedIn, isAdmin, function(req, res){
   Email.find({email: email}, function(err, emailsFound){
     if(emailsFound.length){
       req.flash('error', 'That email already exists!');
-      res.redirect('back');
-    } else {
-      Email.create({email: email}, function(err){
-        if(err){
-          req.flash('error', err.message);
-          return res.redirect('back');
-        }
-        req.flash('success', 'Added to whitelist!');
-        res.redirect('back');
-      });
+      return res.redirect('back');
     }
+    Email.create({email: email}, function(err){
+      if(err){
+        req.flash('error', err.message);
+        return res.redirect('back');
+      }
+      req.flash('success', 'Added to whitelist!');
+      res.redirect('back');
+    });    
   });
 });
 
