@@ -25,7 +25,7 @@
                             </div>
                             <div class="ui segment">
                                 <h3 class="ui small header">Description</h3>
-                                <p><%= show.description %></p>
+                                <p><%- show.description.replace(/\n/g, '<br>') %></p>
                             </div>
                             <div class="ui segment">
                                 <h3 class="ui small header">Tags</h3>

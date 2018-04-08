@@ -30,7 +30,7 @@
                         
                         <div class="field">
                             <label for="input-description">Description</label>
-                            <textarea id="input-description" name="show[description]"><%= show.description %></textarea>
+                            <textarea id="input-description" name="show[description]" maxlength="1000"><%= show.description.replace(/<br>/g,'\n') %></textarea>
                         </div>
                         <div class="field">
                             <label for="input-year">Debut Year</label>

@@ -10,9 +10,14 @@ var path = require('path');
 var cloudinary = require('cloudinary');
 var cloudinaryStorage = require('multer-storage-cloudinary');
 var multer = require('multer');
+var createDOMPurify = require('dompurify');
+var {JSDOM} = require('jsdom');
 if(process.env.NODE_ENV !== 'production'){
   require('dotenv').config();
 }
+
+var window = (new JSDOM('')).window;
+var DOMPurify = createDOMPurify(window);
 
 var Show = require('../models/show');
 
@@ -63,6 +68,9 @@ router.get('/new', isLoggedIn, isActive, function(req, res){
 router.post('/', isLoggedIn, isActive, upload.single('show[image]'), function(req, res){
   var showData = req.body.show;
   var tagStr = showData.tags;
+  showData.description = DOMPurify.sanitize(showData.description, {
+    SAFE_FOR_TEMPLATES: true
+  });
   showData.author = req.user._id;
   if(tagStr === ''){
     showData.tags = [];
@@ -131,6 +139,9 @@ router.put('/:showId', isLoggedIn, isActive, isShowAuthor, upload.single('show[i
   var showId = req.params.showId;
   var showData = req.body.show;
   var tagStr = showData.tags;
+  showData.description = DOMPurify.sanitize(showData.description, {
+    SAFE_FOR_TEMPLATES: true,
+  });
   // console.log('desc: ' + showData.description);
   // console.log('before: ' + showData.tags);
   if(tagStr === ''){
