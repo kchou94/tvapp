@@ -14,7 +14,7 @@
                         </div>
                         <div class="field">
                             <label for="input-url">Streamable URL</label>
-                            <input id="input-url" type="text" name="video[url]" placeholder="e.g. https://streamable.com/lgmtt" required pattern="(.*?)streamable.com/[a-zA-Z0-9]*">
+                            <input id="input-url" type="text" name="video[url]" placeholder="e.g. https://streamable.com/lgmtt" required pattern="((https?://(www\.)?)|(www\.)|(//(www\.)?))?streamable\.com/[a-zA-Z0-9]{1,10}">
                         </div>
                         <div class="grouped fields">
                             <label for="video[spoiler]">Does this contain a spoiler?</label>
