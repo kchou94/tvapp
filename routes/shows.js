@@ -182,7 +182,7 @@ router.put('/:showId', isLoggedIn, isActive, isShowAuthor, upload.single('show[i
 router.delete('/:showId', isLoggedIn, isActive, isShowAuthor, function(req, res){
   Show.findByIdAndRemove(req.params.showId, function(err, showRemoved){
     if(err){
-      console.log(err);
+      // console.log(err);
       req.flash('error', err.message);
       return res.redirect('back');
     }
@@ -196,23 +196,23 @@ router.delete('/:showId', isLoggedIn, isActive, isShowAuthor, function(req, res)
       }
       // console.log(result);
     });
-    console.log(showRemoved);
+    // console.log(showRemoved);
     showRemoved.seasons.forEach(function(season){
-      console.log('- ' + season.name);
+      // console.log('- ' + season.name);
       season.images.forEach(function(image){
-        console.log('-- ' + image.description);
+        // console.log('-- ' + image.description);
         var imageMatches = image.url.match(regex);
-        console.log('--- publicId: ' + imageMatches[3]);
+        // console.log('--- publicId: ' + imageMatches[3]);
         cloudinary.v2.uploader.destroy(imageMatches[3], function(error, result){
           if(error){
-            console.log(error);
+            // console.log(error);
             return
           }
-          console.log(result);
+          // console.log(result);
         });
       });      
     });
-    console.log('done');
+    // console.log('done');
     res.redirect('/shows');
   });
 });
