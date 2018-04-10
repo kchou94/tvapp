@@ -2,6 +2,9 @@
    Show!
    Model!
 =========*/
+
+//0.2.1 is backwards compatible with 0.2.0!
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -44,9 +47,18 @@ var showSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    likes: [
+        {
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+            },
+            username: String
+        }        
+    ],
     schemaVersion: {
         type: String,
-        default: '0.2.0'
+        default: '0.2.1'
     }
 });
 

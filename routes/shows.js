@@ -199,6 +199,44 @@ router.delete('/:showId', isLoggedIn, isActive, isShowAuthor, function(req, res)
   });
 });
 
+/* SHOW LIKES */
+
+/* NEW */
+router.post('/:showId/like', isLoggedIn, isActive, function(req, res){
+  var showId = req.params.showId;
+  var user = req.user;
+  Show.findById(showId, function(err, showFound){
+    if(err){
+      req.flash('error', err.message);
+      return res.redirect('back');
+    }
+    var likeArr = showFound.likes;
+    var userData = {
+      username: user.displayName,
+      user: user._id
+    }
+    likeArr.push(userData);
+    showFound.save( function(err){
+      if(err){
+        req.flash('error', err.message);
+        return res.redirect('back');
+      }
+      var refData = {
+        kind: 'Show',
+        item: showFound._id
+      }
+      user.likes.push(refData);
+      user.save(function(err){
+        if(err){
+          req.flash('error', err.message);
+          return res.redirect('back');
+        }
+        res.redirect('back');
+      });
+    });    
+  });
+});
+
 /*===========
 Season Routes
 ============*/

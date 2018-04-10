@@ -81,3 +81,10 @@ Show.find({}, function(err, shows){
     });
     console.log('done');    
 });
+
+/*=====================
+ 0.2.0 -> 0.2.1
+ Update Versioning
+ =====================*/
+
+ //Note: 0.2.1 is backwards compatible with 0.2.0

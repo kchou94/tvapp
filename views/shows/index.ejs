@@ -7,6 +7,11 @@
             </div>
             <div class="ui vertical very padded segment container">
                 <div id="showcase" class="ui centered cards">
+                    <% function isLiked(show){ %>
+                        <% return userCurrent.likes.some(function(like){ %>
+                        <%    return like.item == show.id; %>
+                        <% }); %>
+                    <% } %>
                     <% shows.forEach(function(show){ %>
                     <div class="ui raised link card">
                         <% if(userCurrent && ((show.author && show.author == userCurrent.id) || userCurrent.isAdmin)){ %>
@@ -17,8 +22,47 @@
                         <a href="/shows/<%= show._id %>" class="image">                 
                             <img src="<%= show.thumbnail %>" alt="<%= show.title %> poster art">
                         </a>
-                        <div class="content">
-                            <a href="/shows/<%= show._id %>" class="header"><%= show.title %></a>
+                        <div class="content">                            
+                            <div class="ui two column grid">                                    
+                                <div class="thirteen wide column">
+                                    <h3 class="ui small header">
+                                        <a href="/shows/<%= show._id %>">
+                                            <%= show.title %>
+                                        </a>
+                                    </h3>
+                                </div>                                
+                                <form action=
+                                    <% if(isLiked(show)){ %>
+                                    "/shows/<%= show._id %>/like?_method=DELETE"                                       
+                                    <% } else { %>
+                                    "/shows/<%= show._id %>/like"
+                                    <% } %>
+                                    method="POST" class="three wide center aligned column">
+                                    <button class="like-button">
+                                        <i class="heart
+                                        <% if(!isLiked(show)){ %>
+                                         outline
+                                        <% } %>
+                                         fitted link icon"></i>
+                                        <% if(show.likes[0]){ %>
+                                        <div class="ui popup">
+                                            <h4 class="left aligned header">Likes:</h4>                                            
+                                            <div class="ui left aligned list">
+                                                <% for(var i = 0; (i < 5 && i < show.likes.length); i++){ %>
+                                                <div class="item"><%= show.likes[i].username %></div>
+                                                <% } %>
+                                            </div>
+                                            <% if(show.likes.length > 5){ %>
+                                            <p><%= show.likes.length - 5 %> more...</p>
+                                            <% } %>
+                                        </div>
+                                        <% } %>
+                                    </button>
+                                    <% if(show.likes[0]){ %>
+                                    <p><%= show.likes.length %></p>
+                                    <% } %>
+                                </form>                                                               
+                            </div>                                                                                  
                             <div class="meta">
                                 <span class="date"><%= show.year %></span>
                                 <span class="foreign-name"><%= show.foreignTitle %></span>
@@ -42,6 +86,9 @@
         <script>
             $('.ui.dropdown').dropdown({
                 action: 'hide'
+            });
+            $('.heart.icon').popup({
+                inline: true
             });
         </script>
     <%- include('../partials/footer') %>
