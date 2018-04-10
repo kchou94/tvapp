@@ -182,19 +182,37 @@ router.put('/:showId', isLoggedIn, isActive, isShowAuthor, upload.single('show[i
 router.delete('/:showId', isLoggedIn, isActive, isShowAuthor, function(req, res){
   Show.findByIdAndRemove(req.params.showId, function(err, showRemoved){
     if(err){
+      console.log(err);
       req.flash('error', err.message);
       return res.redirect('back');
     }
-    var imgToDeleteURL = showRemoved.image;
+    var showImage = showRemoved.image;
     var regex = new RegExp('^(.*?)res\\.cloudinary\\.com\\/' + process.env.CLOUDINARY_NAME + '\/(.*?)\/(' + process.env.CLOUDINARY_FOLDER + '\/(.*?))\\.(.*)');
-    var imgToDeleteMatches = imgToDeleteURL.match(regex);
-    cloudinary.v2.uploader.destroy(imgToDeleteMatches[3], function(error, result){
+    var showImageMatches = showImage.match(regex);
+    cloudinary.v2.uploader.destroy(showImageMatches[3], function(error, result){
       if(error){
         // console.log(error);
         return
       }
       // console.log(result);
     });
+    console.log(showRemoved);
+    showRemoved.seasons.forEach(function(season){
+      console.log('- ' + season.name);
+      season.images.forEach(function(image){
+        console.log('-- ' + image.description);
+        var imageMatches = image.url.match(regex);
+        console.log('--- publicId: ' + imageMatches[3]);
+        cloudinary.v2.uploader.destroy(imageMatches[3], function(error, result){
+          if(error){
+            console.log(error);
+            return
+          }
+          console.log(result);
+        });
+      });      
+    });
+    console.log('done');
     res.redirect('/shows');
   });
 });
