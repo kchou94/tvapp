@@ -7,11 +7,7 @@
             </div>
             <div class="ui vertical very padded segment container">
                 <div id="showcase" class="ui centered cards">
-                    <% function isLiked(show){ %>
-                        <% return userCurrent.likes.some(function(like){ %>
-                        <%    return like.item == show.id; %>
-                        <% }); %>
-                    <% } %>
+                    
                     <% shows.forEach(function(show){ %>
                     <div class="ui raised link card">
                         <% if(userCurrent && ((show.author && show.author == userCurrent.id) || userCurrent.isAdmin)){ %>
@@ -32,8 +28,8 @@
                                     </h3>
                                 </div>                                
                                 <form action=
-                                    <% if(isLiked(show)){ %>
-                                    "/shows/<%= show._id %>/like?_method=DELETE"                                       
+                                    <% if(userCurrent && isLiked(show)){ %>
+                                    "/shows/<%= show._id %>/like/<%= userCurrent._id %>?_method=DELETE"                                       
                                     <% } else { %>
                                     "/shows/<%= show._id %>/like"
                                     <% } %>
@@ -83,6 +79,13 @@
                 </div> <!--/cards-->
             </div> <!--/container-->
         </main>
+        <% function isLiked(show){ %>
+            <% if(userCurrent){ %>
+                <% return userCurrent.likes.some(function(like){ %>
+                <%    return like.item == show.id; %>
+                <% }); %>
+            <% } %>            
+        <% } %>
         <script>
             $('.ui.dropdown').dropdown({
                 action: 'hide'

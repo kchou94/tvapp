@@ -201,7 +201,7 @@ router.delete('/:showId', isLoggedIn, isActive, isShowAuthor, function(req, res)
 
 /* SHOW LIKES */
 
-/* NEW */
+/* CREATE */
 router.post('/:showId/like', isLoggedIn, isActive, function(req, res){
   var showId = req.params.showId;
   var user = req.user;
@@ -235,6 +235,59 @@ router.post('/:showId/like', isLoggedIn, isActive, function(req, res){
       });
     });    
   });
+});
+
+/* DESTROY */
+router.delete('/:showId/like/:userId', isLoggedIn, isActive, isUserId, function(req, res){
+  var showId = req.params.showId;
+  var userId = req.params.userId;
+  Show.findById(showId, function(err, showFound){
+    if(err){
+      req.flash('error', err.message);
+      return res.redirect('back');
+    }
+    var likes = showFound.likes;
+    var likeIndex;
+    for(var i = 0; i < likes.length; i++){
+      if(likes[i].user == userId){
+        likeIndex = i;
+        break
+      }
+    }
+    if(typeof likeIndex){
+      likes.splice(likeIndex, 1);
+      showFound.save(function(err){
+        if(err){
+          req.flash('error', err.message);
+          res.redirect('back');
+        }
+        var userLikes = req.user.likes;
+        var userLikesIndex;
+        for(var i = 0; i < userLikes.length; i++){
+          if(userLikes[i].item == showId){
+            userLikesIndex = i;
+            break
+          }
+        }
+        if(typeof userLikesIndex){
+          userLikes.splice(userLikesIndex, 1);
+          req.user.save(function(err){
+            if(err){
+              req.flash('error', err.message);
+              return res.redirect('back');
+            }
+            res.redirect('back');
+          })
+        } else {
+          req.flash('error', 'Could not find your like in user document!');
+          res.redirect('back');
+        }        
+      });
+    } else {
+      req.flash('error', 'Could not find your like in show document!');
+      res.redirect('back');
+    }
+  })
 });
 
 /*===========
@@ -687,6 +740,16 @@ function isImageAuthor(req, res, next){
       res.redirect('back');
     }
   })
+}
+
+function isUserId(req, res, next){
+  var userId = req.params.userId;
+  if(userId == req.user.id){
+    next();
+  } else {
+    req.flash('error', 'Unauthorized: you are not the user!');
+    res.redirect('back');
+  }
 }
 
 module.exports = router;
