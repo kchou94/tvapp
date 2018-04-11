@@ -1,5 +1,5 @@
 {
-  "name": "anime-app",
+  "name": "tv-app",
   "author": "Kevin Chou",
   "version": "0.1.0",
   "private": true,
@@ -7,7 +7,6 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "@sendgrid/mail": "^6.2.1",
     "body-parser": "~1.18.2",
     "cloudinary": "^1.11.0",
     "connect-flash": "^0.1.1",
