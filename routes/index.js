@@ -71,8 +71,8 @@ router.post('/register', function(req, res){
               to: userData.email,
               from: 'moemoeclubmailer@gmail.com',
               subject: 'Hilight - Welcome!  Please verify your account',
-              text: 'Welcome to Hilight!  Please verify your account by going to: http://moemoeclub-kchou94.herokuapp.com/activate/' + tokenGen,
-              html: '<h1>Welcome to Hilight!</h1><p>Please verify your account by clicking the link below</p><a href=\"http://moemoeclub-kchou94.herokuapp.com/activate/' + tokenGen + '\">Verify me!</a><p>If that doesn\'t work, copy and paste this into your browser address bar: http://moemoeclub-kchou94.herokuapp.com/activate/' + tokenGen + '</p>'
+              text: 'Welcome to Hilight!  Please verify your account by going to: http://hilight-kchou94.herokuapp.com/activate/' + tokenGen,
+              html: '<h1>Welcome to Hilight!</h1><p>Please verify your account by clicking the link below</p><a href=\"http://hilight-kchou94.herokuapp.com/activate/' + tokenGen + '\">Verify me!</a><p>If that doesn\'t work, copy and paste this into your browser address bar: http://hilight-kchou94.herokuapp.com/activate/' + tokenGen + '</p>'
             };
             transporter.sendMail(msg, function(err, info){
               // if(err){
