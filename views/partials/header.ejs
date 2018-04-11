@@ -10,7 +10,7 @@
         crossorigin="anonymous"></script>
         <script src="/semantic/dist/semantic.min.js"></script>
         <title>
-            Moe Moe Club<% if(typeof page != 'undefined' && page != 'home'){ %>
+            Hilight<% if(typeof page != 'undefined' && page != 'home'){ %>
                 <%= " | " + page[0].toUpperCase() + page.substr(1); %>
             <% } %>
         </title>
@@ -148,7 +148,7 @@
                 }
             }
 
-            #bg-video{
+            #bg-image{
                 min-height: 101%;
                 min-width: 101%;
                 position: fixed;
@@ -157,7 +157,7 @@
                 transform: translate(-50%, -50%);
                 z-index: -1;
                 padding: 0;
-                filter: blur(4px);
+                filter: blur(2px);
             }
 
             #dot-overlay{
@@ -203,12 +203,12 @@
     </head>
     <body>
         <header>
-            <nav class="ui inverted borderless fixed large menu">
+            <nav class="ui borderless fixed large menu">
                 <div class="ui container">
                     <div class="header item">
                         <a href="/">
                         <i class="star outline icon"></i>
-                        MMC
+                        Hilight
                         </a>
                     </div>
                     <a href="/" class="item <%= typeof page != 'undefined' && page === 'home' ? 'active' : '' %>">Home</a>
